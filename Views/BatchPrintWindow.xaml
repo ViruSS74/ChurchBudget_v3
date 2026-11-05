@@ -1,0 +1,117 @@
+﻿<Window x:Class="ChurchBudget_v3_WPF.Views.BatchPrintWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ChurchBudget_v3_WPF.Views"
+        mc:Ignorable="d"
+        Title="Пакетная печать документов" Height="350" Width="600"
+        MinHeight="350" MinWidth="600"
+        WindowStartupLocation="CenterOwner" 
+        WindowStyle="None" 
+        AllowsTransparency="True"
+        Background="Transparent"
+        Icon="/main_icon.ico"
+        UseLayoutRounding="True"
+        SnapsToDevicePixels="True">
+
+    <Border Background="{StaticResource ChurchBgColor}" BorderBrush="{StaticResource ChurchWindowBorderColor}" BorderThickness="1">
+        <DockPanel>
+            <!-- 1. АДАПТИВНАЯ ШАПКА ОКНА -->
+            <Border DockPanel.Dock="Top" Background="{StaticResource ChurchHeaderColor}" Padding="8" MouseDown="TitleBar_MouseDown">
+                <Grid>
+                    <!-- Левая часть: Иконка приложения и Название формы -->
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Left">
+                        <Image Source="/main_icon.ico" 
+                               Width="20" 
+                               Height="20" 
+                               Margin="0,0,10,0" 
+                               RenderOptions.BitmapScalingMode="HighQuality"/>
+                        <TextBlock Text="Пакетная печать документов" FontSize="14" FontWeight="Bold" VerticalAlignment="Center"/>
+                    </StackPanel>
+
+                    <!-- Кнопка закрытия формы (в верхнем правом углу) -->
+                    <Button Width="45" HorizontalAlignment="Right" Click="CloseButton_Click">
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="Background" Value="Transparent"/>
+                                <Setter Property="Foreground" Value="#013270"/>
+                                <Setter Property="FontFamily" Value="Marlett"/>
+                                <Setter Property="FontSize" Value="12"/>
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="Button">
+                                            <Border x:Name="border" Background="{TemplateBinding Background}">
+                                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                            </Border>
+                                            <ControlTemplate.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter TargetName="border" Property="Background" Value="#E81123"/>
+                                                    <Setter Property="Foreground" Value="White"/>
+                                                </Trigger>
+                                            </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </Button.Style>
+                        X
+                    </Button>
+                </Grid>
+            </Border>
+
+            <!-- 2. НИЖНЯЯ ПАНЕЛЬ С КНОПКАМИ -->
+            <Border DockPanel.Dock="Bottom" Background="{StaticResource ChurchFooterColor}" Padding="12" BorderBrush="#DCDCDC" BorderThickness="0,1,0,0">
+                <Grid>
+                    <!-- Кнопка формирования PDF файла -->
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                        <Button Width="190" Height="32" HorizontalAlignment="Right" Click="PrintButton_Click">
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
+                                <Image Source="/Graph/Icons/pdfprint.png" Width="16" Height="16" Margin="0,0,8,0" RenderOptions.BitmapScalingMode="HighQuality"/>
+                                <TextBlock Text="Создать общий PDF" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+
+                    <!-- Кнопка закрытия формы справочника (справа) -->
+                    <Button Width="120" Height="32" HorizontalAlignment="Right" Click="CloseButton_Click">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
+                            <Image Source="/Graph/Icons/exit.png" Width="16" Height="16" Margin="0,0,8,0" RenderOptions.BitmapScalingMode="HighQuality"/>
+                            <TextBlock Text="Закрыть" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+                </Grid>
+            </Border>
+
+            <!-- 3. СТРАХОВОЧНЫЙ СКРОЛЛЕР С ОГРАНИЧЕНИЕМ ШИРИНЫ -->
+            <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                <!-- ЦЕНТРАЛЬНАЯ РАБОЧАЯ ОБЛАСТЬ -->
+                <Grid Margin="15">
+                    <GroupBox Header=" Функции печати: " Padding="15" FontSize="13" FontWeight="Bold">
+                        <Grid VerticalAlignment="Top" Margin="5,10,5,5">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+
+                            <!-- Выбор периода (Год и Месяц) -->
+                            <StackPanel Orientation="Horizontal" Grid.Row="0" Margin="0,0,0,15">
+                                <TextBlock Text="Год:" VerticalAlignment="Center" Margin="0,0,10,0" FontWeight="Bold"/>
+                                <ComboBox x:Name="cmbYear" Width="90" Height="28" Margin="0,0,20,0" VerticalContentAlignment="Center"/>
+                                <TextBlock Text="Месяц:" VerticalAlignment="Center" Margin="0,0,10,0" FontWeight="Bold"/>
+                                <ComboBox x:Name="cmbMonth" Width="150" Height="28" VerticalContentAlignment="Center"/>
+                            </StackPanel>
+
+                            <!-- Выбор вида документа -->
+                            <StackPanel Orientation="Horizontal" Grid.Row="1" Margin="0,0,0,5">
+                                <TextBlock Text="Вид документа:" VerticalAlignment="Center" Margin="0,0,10,0" FontWeight="Bold"/>
+                                <ComboBox x:Name="cmbDoc" Width="240" Height="28" Margin="0,0,20,0" VerticalContentAlignment="Center"/>
+                            </StackPanel>
+                        </Grid>
+                    </GroupBox>
+                </Grid>
+            </ScrollViewer>
+        </DockPanel>
+    </Border>
+</Window>

@@ -1,0 +1,466 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="packages\Obfuscar.2.2.50\build\obfuscar.props" Condition="Exists('packages\Obfuscar.2.2.50\build\obfuscar.props')" />
+  <Import Project="packages\EntityFramework.6.5.2\build\EntityFramework.props" Condition="Exists('packages\EntityFramework.6.5.2\build\EntityFramework.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{591A1FE6-20DA-49EC-94DC-7C85E960EB82}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>ChurchBudget_v3_WPF</RootNamespace>
+    <AssemblyName>ChurchBudget_v3_WPF</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Deterministic>true</Deterministic>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <LangVersion>7.3</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+    <WarningLevel>0</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <LangVersion>7.3</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>packages\EntityFramework.6.5.2\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>packages\EntityFramework.6.5.2\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="QuestPDF, Version=2026.7.1.0, Culture=neutral, PublicKeyToken=0f3c2b2315ff52c8, processorArchitecture=MSIL">
+      <HintPath>packages\QuestPDF.2026.7.1\lib\netstandard2.0\QuestPDF.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Buffers, Version=4.0.5.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>packages\System.Buffers.4.6.1\lib\net462\System.Buffers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.SQLite, Version=1.0.119.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
+      <HintPath>packages\Stub.System.Data.SQLite.Core.NetFramework.1.0.119.0\lib\net46\System.Data.SQLite.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Management" />
+    <Reference Include="System.Memory, Version=4.0.5.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>packages\System.Memory.4.6.3\lib\net462\System.Memory.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Numerics.Vectors, Version=4.1.6.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>packages\System.Numerics.Vectors.4.6.1\lib\net462\System.Numerics.Vectors.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=6.0.3.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>packages\System.Runtime.CompilerServices.Unsafe.6.1.2\lib\net462\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Transactions" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xaml">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\BudgetReport.cs" />
+    <Compile Include="Models\DocExpenseItemUI.cs" />
+    <Compile Include="Models\DocItemUI.cs" />
+    <Compile Include="Models\ExpensesCategoryUI.cs" />
+    <Compile Include="Models\IncomeCategoryUI.cs" />
+    <Compile Include="Models\PersonalItem.cs" />
+    <Compile Include="Reports\BudgetReportModel.cs" />
+    <Compile Include="Reports\CashBookDocument.cs" />
+    <Compile Include="Reports\CashBookReport.cs" />
+    <Compile Include="Reports\CashOrderInDataModel.cs" />
+    <Compile Include="Reports\CashOrderOutReport.cs" />
+    <Compile Include="Reports\CashOrdersPacketReport.cs" />
+    <Compile Include="Reports\ExpenseDataModel.cs" />
+    <Compile Include="Reports\ExpensePacketReport.cs" />
+    <Compile Include="Reports\ExpenseReportA4.cs" />
+    <Compile Include="Reports\FinancialBudgetReport.cs" />
+    <Compile Include="Reports\RaportichkaDataModel.cs" />
+    <Compile Include="Reports\RaportichkaPacketReport.cs" />
+    <Compile Include="Reports\RaportichkaReport.cs" />
+    <Compile Include="Reports\ReportHelper.cs" />
+    <Compile Include="Services\CashbookService.cs" />
+    <Compile Include="Services\CategoryModel.cs" />
+    <Compile Include="Services\ConvertService.cs" />
+    <Compile Include="Services\DBService.cs" />
+    <Compile Include="Services\ExpensesCategoryService.cs" />
+    <Compile Include="Services\ExpensesDocService.cs" />
+    <Compile Include="Services\ExpensesService.cs" />
+    <Compile Include="Services\FinancialReportService.cs" />
+    <Compile Include="Services\IncomeCategoryService.cs" />
+    <Compile Include="Services\IncomeDocService.cs" />
+    <Compile Include="Services\IncomeService.cs" />
+    <Compile Include="Services\LicenseManager.cs" />
+    <Compile Include="Services\ListOfDocsService.cs" />
+    <Compile Include="Services\UpdateService.cs" />
+    <Compile Include="Views\AboutWindow.xaml.cs">
+      <DependentUpon>AboutWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\BatchPrintWindow.xaml.cs">
+      <DependentUpon>BatchPrintWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\CashbookWindow.xaml.cs">
+      <DependentUpon>CashbookWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\DocEditorWindow.xaml.cs">
+      <DependentUpon>DocEditorWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\EmployeeDirWindow.xaml.cs">
+      <DependentUpon>EmployeeDirWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\EmployeeEditWindow.xaml.cs">
+      <DependentUpon>EmployeeEditWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ExpensesCatDirWindow.xaml.cs">
+      <DependentUpon>ExpensesCatDirWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ExpensesCatEditWindow.xaml.cs">
+      <DependentUpon>ExpensesCatEditWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\FinanceReportWindow.xaml.cs">
+      <DependentUpon>FinanceReportWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\IDDocsDirWindow.xaml.cs">
+      <DependentUpon>IDDocsDirWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\IDDocsEditWindow.xaml.cs">
+      <DependentUpon>IDDocsEditWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\IncomeCatDirWindow.xaml.cs">
+      <DependentUpon>IncomeCatDirWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\IncomeCatEditWindow.xaml.cs">
+      <DependentUpon>IncomeCatEditWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\LicenseWindow.xaml.cs">
+      <DependentUpon>LicenseWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ListOfDocsWindow.xaml.cs">
+      <DependentUpon>ListOfDocsWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\NewExpensesWindow.xaml.cs">
+      <DependentUpon>NewExpensesWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\NewIncomeWindow.xaml.cs">
+      <DependentUpon>NewIncomeWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\OpeningBalanceWindow.xaml.cs">
+      <DependentUpon>OpeningBalanceWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\OrganizationDirWindow.xaml.cs">
+      <DependentUpon>OrganizationDirWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\OrganizationEditWindow.xaml.cs">
+      <DependentUpon>OrganizationEditWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\TypesIDDocsDirWindow.xaml.cs">
+      <DependentUpon>TypesIDDocsDirWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\TypesIDDocsEditWindow.xaml.cs">
+      <DependentUpon>TypesIDDocsEditWindow.xaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="MainWindow.xaml.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <Compile Include="Reports\CashOrderInReport.cs" />
+    <Resource Include="Graph\Icons\about.png" />
+    <Resource Include="Graph\Icons\accept.png" />
+    <Resource Include="Graph\Icons\add.png" />
+    <Resource Include="Graph\Icons\arch_db.png" />
+    <Resource Include="Graph\Icons\arch_prog.png" />
+    <Resource Include="Graph\Icons\attention.png" />
+    <Resource Include="Graph\Icons\blank_doc.png" />
+    <Resource Include="Graph\Icons\block.png" />
+    <Resource Include="Graph\Icons\calendar.png" />
+    <Resource Include="Graph\Icons\cancel.png" />
+    <Resource Include="Graph\Icons\cashbook.png" />
+    <Resource Include="Graph\Icons\check.png" />
+    <Resource Include="Graph\Icons\church.png" />
+    <Resource Include="Graph\Icons\clean_db.png" />
+    <Resource Include="Graph\Icons\cross_ico.png" />
+    <Resource Include="Graph\Icons\delete.png" />
+    <Resource Include="Graph\Icons\doc_types.png" />
+    <Resource Include="Graph\Icons\edit.png" />
+    <Resource Include="Graph\Icons\error.png" />
+    <Resource Include="Graph\Icons\exit.png" />
+    <Resource Include="Graph\Icons\expense_cat.png" />
+    <Resource Include="Graph\Icons\expense_doc.png" />
+    <Resource Include="Graph\Icons\expense_rep.png" />
+    <Resource Include="Graph\Icons\finreport.png" />
+    <Resource Include="Graph\Icons\help.png" />
+    <Resource Include="Graph\Icons\home.png" />
+    <Resource Include="Graph\Icons\hourglass.png" />
+    <Resource Include="Graph\Icons\id_docs.png" />
+    <Resource Include="Graph\Icons\id_types.png" />
+    <Resource Include="Graph\Icons\income_cat.png" />
+    <Resource Include="Graph\Icons\income_doc.png" />
+    <Resource Include="Graph\Icons\income_rep.png" />
+    <Resource Include="Graph\Icons\main_icon.ico" />
+    <Resource Include="Graph\Icons\new_document.png" />
+    <Resource Include="Graph\Icons\next.png" />
+    <Resource Include="Graph\Icons\on_off.png" />
+    <Resource Include="Graph\Icons\open.png" />
+    <Resource Include="Graph\Icons\personal.png" />
+    <Resource Include="Graph\Icons\pko_rep.png" />
+    <Resource Include="Graph\Icons\prev.png" />
+    <Resource Include="Graph\Icons\priest.png" />
+    <Resource Include="Graph\Icons\print.png" />
+    <Resource Include="Graph\Icons\refresh.png" />
+    <Resource Include="Graph\Icons\repare_arch.png" />
+    <Resource Include="Graph\Icons\repare_db.png" />
+    <Resource Include="Graph\Icons\rko_rep.png" />
+    <Resource Include="Graph\Icons\save.png" />
+    <Resource Include="Graph\Icons\search.png" />
+    <Resource Include="Graph\Icons\taskbar_icon.png" />
+    <Resource Include="Graph\Icons\batchprint.png" />
+    <Resource Include="Graph\Icons\opening_balance.png" />
+    <Resource Include="Graph\Icons\clear.png" />
+    <Resource Include="Graph\Icons\stamp.png" />
+    <Resource Include="Graph\Icons\pdfprint.png" />
+    <Resource Include="Graph\Images\church.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Graph\Icons\update.png" />
+    <Content Include="main.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <Content Include="Data\church.db">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Help.pdf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="bin\" />
+    <Folder Include="Data\Archive\" />
+    <Folder Include="Receipts\" />
+    <Folder Include="Support\" />
+    <Folder Include="Templates\" />
+    <Folder Include="ViewModels\" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.7.2">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.7.2 %28x86 и x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="MainWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\AboutWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\BatchPrintWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\CashbookWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\DocEditorWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\EmployeeDirWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\EmployeeEditWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ExpensesCatDirWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\ExpensesCatEditWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\FinanceReportWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\IDDocsDirWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\IDDocsEditWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\IncomeCatDirWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\IncomeCatEditWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\LicenseWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ListOfDocsWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\NewExpensesWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\NewIncomeWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\OpeningBalanceWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\OrganizationDirWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\OrganizationEditWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\TypesIDDocsDirWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\TypesIDDocsEditWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="main_icon.ico">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="packages\QuestPDF.2026.7.1\build\net4\QuestPDF.targets" Condition="Exists('packages\QuestPDF.2026.7.1\build\net4\QuestPDF.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>Данный проект ссылается на пакеты NuGet, отсутствующие на этом компьютере. Используйте восстановление пакетов NuGet, чтобы скачать их.  Дополнительную информацию см. по адресу: http://go.microsoft.com/fwlink/?LinkID=322105. Отсутствует следующий файл: {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('packages\QuestPDF.2026.7.1\build\net4\QuestPDF.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\QuestPDF.2026.7.1\build\net4\QuestPDF.targets'))" />
+    <Error Condition="!Exists('packages\EntityFramework.6.5.2\build\EntityFramework.props')" Text="$([System.String]::Format('$(ErrorText)', 'packages\EntityFramework.6.5.2\build\EntityFramework.props'))" />
+    <Error Condition="!Exists('packages\EntityFramework.6.5.2\build\EntityFramework.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\EntityFramework.6.5.2\build\EntityFramework.targets'))" />
+    <Error Condition="!Exists('packages\Stub.System.Data.SQLite.Core.NetFramework.1.0.119.0\build\net46\Stub.System.Data.SQLite.Core.NetFramework.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\Stub.System.Data.SQLite.Core.NetFramework.1.0.119.0\build\net46\Stub.System.Data.SQLite.Core.NetFramework.targets'))" />
+    <Error Condition="!Exists('packages\Obfuscar.2.2.50\build\obfuscar.props')" Text="$([System.String]::Format('$(ErrorText)', 'packages\Obfuscar.2.2.50\build\obfuscar.props'))" />
+  </Target>
+  <Import Project="packages\EntityFramework.6.5.2\build\EntityFramework.targets" Condition="Exists('packages\EntityFramework.6.5.2\build\EntityFramework.targets')" />
+  <Import Project="packages\Stub.System.Data.SQLite.Core.NetFramework.1.0.119.0\build\net46\Stub.System.Data.SQLite.Core.NetFramework.targets" Condition="Exists('packages\Stub.System.Data.SQLite.Core.NetFramework.1.0.119.0\build\net46\Stub.System.Data.SQLite.Core.NetFramework.targets')" />
+  <PropertyGroup>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
+</Project>

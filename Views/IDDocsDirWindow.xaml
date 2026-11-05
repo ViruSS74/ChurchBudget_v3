@@ -1,0 +1,153 @@
+﻿<Window x:Class="ChurchBudget_v3_WPF.Views.IDDocsDirWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ChurchBudget_v3_WPF.Views"
+        mc:Ignorable="d"
+        Title="Справочник: ИД Документов" Height="660" Width="1150"
+        MinHeight="550" MinWidth="950"
+        WindowStartupLocation="CenterOwner" 
+        WindowStyle="None" 
+        AllowsTransparency="True"
+        Background="Transparent"
+        Icon="/main_icon.ico"
+        UseLayoutRounding="True"
+        SnapsToDevicePixels="True">
+    <Border Background="{StaticResource ChurchBgColor}" BorderBrush="{StaticResource ChurchWindowBorderColor}" BorderThickness="1">
+        <DockPanel>
+            <!-- 1. АДАПТИВНАЯ ШАПКА ОКНА -->
+            <Border DockPanel.Dock="Top" Background="{StaticResource ChurchHeaderColor}" Padding="8" MouseDown="TitleBar_MouseDown">
+                <Grid>
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Left">
+                        <Image Source="/main_icon.ico" Width="20" Height="20" Margin="0,0,10,0" RenderOptions.BitmapScalingMode="HighQuality"/>
+                        <TextBlock Text="Справочник: ИД документы сотрудников" FontSize="14" FontWeight="Bold" VerticalAlignment="Center"/>
+                    </StackPanel>
+                    <Button Width="45" HorizontalAlignment="Right" Click="CloseButton_Click">
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="Background" Value="Transparent"/>
+                                <Setter Property="Foreground" Value="#013270"/>
+                                <Setter Property="FontFamily" Value="Marlett"/>
+                                <Setter Property="FontSize" Value="12"/>
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="Button">
+                                            <Border x:Name="border" Background="{TemplateBinding Background}">
+                                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                            </Border>
+                                            <ControlTemplate.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter TargetName="border" Property="Background" Value="#E81123"/>
+                                                    <Setter Property="Foreground" Value="White"/>
+                                                </Trigger>
+                                            </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </Button.Style>
+                        X
+                    </Button>
+                </Grid>
+            </Border>
+
+            <!-- 2. НИЖНЯЯ ПАНЕЛЬ С КНОПКАМИ УПРАВЛЕНИЯ -->
+            <Border DockPanel.Dock="Bottom" Background="{StaticResource ChurchFooterColor}" Padding="12" BorderBrush="#DCDCDC" BorderThickness="0,1,0,0">
+                <Grid>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center">
+                        <Button Width="120" Height="32" Margin="0,0,10,0" Click="AddButton_Click">
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
+                                <Image Source="/Graph/Icons/add.png" Width="16" Height="16" Margin="0,0,8,0" RenderOptions.BitmapScalingMode="HighQuality"/>
+                                <TextBlock Text="Добавить" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+                        <Button Width="120" Height="32" Margin="0,0,10,0" Click="EditButton_Click">
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
+                                <Image Source="/Graph/Icons/edit.png" Width="16" Height="16" Margin="0,0,8,0" RenderOptions.BitmapScalingMode="HighQuality"/>
+                                <TextBlock Text="Изменить" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+                        <Button Width="120" Height="32" Click="DeleteButton_Click">
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
+                                <Image Source="/Graph/Icons/delete.png" Width="16" Height="16" Margin="0,0,8,0" RenderOptions.BitmapScalingMode="HighQuality"/>
+                                <TextBlock Text="Удалить" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+                    <Button Width="120" Height="32" HorizontalAlignment="Right" Click="CloseButton_Click" VerticalAlignment="Center">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
+                            <Image Source="/Graph/Icons/exit.png" Width="16" Height="16" Margin="0,0,8,0" RenderOptions.BitmapScalingMode="HighQuality"/>
+                            <TextBlock Text="Закрыть" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+                </Grid>
+            </Border>
+
+            <!-- 3. ЦЕНТРАЛЬНАЯ РАБОЧАЯ ОБЛАСТЬ (Таблица) -->
+            <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                <Grid Margin="10">
+                    <DataGrid Name="dgIDDocuments" 
+                    LoadingRow="dgIDDocuments_LoadingRow"
+                    AutoGenerateColumns="False" 
+                    CanUserAddRows="False" 
+                    IsReadOnly="True" 
+                    SelectionMode="Single" 
+                    Background="{StaticResource ChurchGridBg}"
+                    RowBackground="{StaticResource ChurchGridRowAlternating}"
+                    AlternatingRowBackground="{StaticResource ChurchGridRowNormal}"
+                    GridLinesVisibility="Horizontal" 
+                    HorizontalGridLinesBrush="{StaticResource ChurchWindowBorderColor}" 
+                    FontSize="14">
+                        <DataGrid.ColumnHeaderStyle>
+                            <Style TargetType="DataGridColumnHeader">
+                                <Setter Property="Background" Value="#D3E2CD"/>
+                                <Setter Property="Foreground" Value="#2F3E2B"/>
+                                <Setter Property="FontWeight" Value="Bold"/>
+                                <Setter Property="Padding" Value="8,6,8,6"/>
+                                <Setter Property="BorderBrush" Value="#2F3E2B"/>
+                                <Setter Property="BorderThickness" Value="0,0,1,1"/>
+                            </Style>
+                        </DataGrid.ColumnHeaderStyle>
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Сотрудник" Binding="{Binding Сотрудник}" Width="2*"/>
+                            <DataGridTextColumn Header="Тип документа" Binding="{Binding [Тип документа]}" Width="1.5*"/>
+                            <DataGridTextColumn Header="Серия" Binding="{Binding Серия}" Width="0.8*">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="HorizontalAlignment" Value="Center"/>
+                                        <Setter Property="VerticalAlignment" Value="Center"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn Header="Номер" Binding="{Binding Номер}" Width="1.2*">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="VerticalAlignment" Value="Center"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn Header="Выдано" Binding="{Binding Выдано}" Width="3.5*">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="VerticalAlignment" Value="Center"/>
+                                        <Setter Property="Padding" Value="5,0,0,0"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            <!-- Дата выдачи -->
+                            <DataGridTextColumn Header="Дата выдачи" Binding="{Binding [Дата выдачи], StringFormat=\{0:dd.MM.yyyy\}}" Width="1.2*">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="HorizontalAlignment" Value="Center"/>
+                                        <Setter Property="VerticalAlignment" Value="Center"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </ScrollViewer>
+</DockPanel>
+    </Border>
+</Window>
