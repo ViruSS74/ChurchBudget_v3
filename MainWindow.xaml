@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ChurchBudget_v3_WPF"
         mc:Ignorable="d"
-        Title="-=== Учет бюджета церкви v.3.1.123 ===-" Height="660" Width="1150"
+        Title="-=== Учет бюджета церкви v.3.1.125 ===-" Height="660" Width="1150"
         MinHeight="550" MinWidth="950"
         WindowStartupLocation="CenterScreen"
         WindowStyle="None" 
@@ -24,7 +24,7 @@
                     <!-- Левая часть: Иконка и Название программы -->
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Left">
                         <Image Source="main_icon.ico" Width="20" Height="20" Margin="0,0,10,0" RenderOptions.BitmapScalingMode="HighQuality"/>
-                        <TextBlock Text="-=== Учет бюджета церкви v.3.1.123 ===-" Foreground="#013270" FontSize="16" FontWeight="Bold" VerticalAlignment="Center"/>
+                        <TextBlock Text="-=== Учет бюджета церкви v.3.1.125 ===-" Foreground="#013270" FontSize="16" FontWeight="Bold" VerticalAlignment="Center"/>
                     </StackPanel>
 
                     <!-- Правая часть: Кнопки Свернуть и Закрыть -->

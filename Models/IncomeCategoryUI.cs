@@ -1,5 +1,5 @@
-﻿using System.Windows;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Windows;
 using static ChurchBudget_v3_WPF.Services.IncomeCategoryService;
 
 namespace ChurchBudget_v3_WPF.Models

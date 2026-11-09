@@ -1,6 +1,6 @@
-﻿using ChurchBudget_v3_WPF.Reports;
+﻿using ChurchBudget;
+using ChurchBudget_v3_WPF.Reports;
 using ChurchBudget_v3_WPF.Services;
-using ChurchBudget;
 using QuestPDF.Fluent;
 using System;
 using System.Collections.Generic;
@@ -188,53 +188,63 @@ namespace ChurchBudget_v3_WPF.Views
                         string orderFilter = selectedDocType.Contains("ПКО") ? "ПКО" : "РКО";
                         List<CashOrderInDataModel> orderList = new List<CashOrderInDataModel>();
 
-                        using (var conn = new SQLiteConnection(_connString)) 
+                        using (var conn = new SQLiteConnection(_connString))
                         {
-                            conn.Open(); 
+                            conn.Open();
                             string sql = @"SELECT * FROM cash_orders WHERE order_type = @type AND STRFTIME ('%Y', date) = @year AND STRFTIME ('%m', date) = @month ORDER BY date (date) ASC, order_number ASC";
-                            using (var cmd = new SQLiteCommand(sql, conn)) 
-                            { 
+                            using (var cmd = new SQLiteCommand(sql, conn))
+                            {
                                 cmd.Parameters.AddWithValue("@type", orderFilter);
                                 cmd.Parameters.AddWithValue("@year", year.ToString());
                                 cmd.Parameters.AddWithValue("@month", monthStr);
-                                using (var reader = cmd.ExecuteReader()) 
+                                using (var reader = cmd.ExecuteReader())
                                 {
-                                    while (reader.Read()) 
+                                    while (reader.Read())
                                     {
                                         DateTime docDate = Convert.ToDateTime(reader["date"]);
-                                        string person = reader ["person_name_manual"] != DBNull.Value ? reader ["person_name_manual"].ToString() : "";
+                                        string person = reader["person_name_manual"] != DBNull.Value ? reader["person_name_manual"].ToString() : "";
                                         string passport = null;
-                                        if (orderFilter == "РКО") 
+                                        if (orderFilter == "РКО")
                                         {
                                             passport = "Паспорт не указан в БД";
                                             string sqlPass = @"SELECT td.name as doc_type, series, number, issued_by, issue_date FROM id_documents idd LEFT JOIN type_id_document td ON idd.type_id_doc = td.id WHERE employee_id = 2 LIMIT 1";
-                                            using (var cmdP = new SQLiteCommand(sqlPass, conn)) 
-                                            using (var rdrP = cmdP.ExecuteReader()) 
+                                            using (var cmdP = new SQLiteCommand(sqlPass, conn))
+                                            using (var rdrP = cmdP.ExecuteReader())
                                             {
-                                                if (rdrP.Read()) 
+                                                if (rdrP.Read())
                                                 {
-                                                    string pDate = rdrP ["issue_date"] != DBNull.Value ? Convert.ToDateTime (rdrP["issue_date"]).ToString("dd.MM.yyyy") : "";
+                                                    string pDate = rdrP["issue_date"] != DBNull.Value ? Convert.ToDateTime(rdrP["issue_date"]).ToString("dd.MM.yyyy") : "";
                                                     passport = $"{rdrP["doc_type"]} {rdrP["series"]} {rdrP["number"]}, выдан {rdrP["issued_by"]} {pDate} г.";
                                                 }
                                             }
                                         }
-                                        orderList.Add(new CashOrderInDataModel 
-                                        { 
-                                            OrganizationName = dbOrgName, OrderNumber = reader["order_number"].ToString().Replace("ПКО-", "").Replace("РКО-", ""), OrderDate = docDate, Amount = Convert.ToDecimal(reader["amount"]), FromPersonGenitive = string.IsNullOrEmpty(person) ? currentTreasurer : person, Basis = reader["base"] != DBNull.Value ? reader["base"].ToString() : "Хозяйственные нужды", Appendix = reader["appendix"] != DBNull.Value ? reader["appendix"].ToString() : "—", RectorName = rector, TreasurerName = currentTreasurer, PassportInfo = passport });
+                                        orderList.Add(new CashOrderInDataModel
+                                        {
+                                            OrganizationName = dbOrgName,
+                                            OrderNumber = reader["order_number"].ToString().Replace("ПКО-", "").Replace("РКО-", ""),
+                                            OrderDate = docDate,
+                                            Amount = Convert.ToDecimal(reader["amount"]),
+                                            FromPersonGenitive = string.IsNullOrEmpty(person) ? currentTreasurer : person,
+                                            Basis = reader["base"] != DBNull.Value ? reader["base"].ToString() : "Хозяйственные нужды",
+                                            Appendix = reader["appendix"] != DBNull.Value ? reader["appendix"].ToString() : "—",
+                                            RectorName = rector,
+                                            TreasurerName = currentTreasurer,
+                                            PassportInfo = passport
+                                        });
                                     }
                                 }
                             }
                         }
-                        if (orderList.Count == 0) 
-                        { 
-                            MessageBox.Show($"Кассовые документы {orderFilter} за выбранный период не найдены.", "Информация", MessageBoxButton.OK, MessageBoxImage.Information); return; 
+                        if (orderList.Count == 0)
+                        {
+                            MessageBox.Show($"Кассовые документы {orderFilter} за выбранный период не найдены.", "Информация", MessageBoxButton.OK, MessageBoxImage.Information); return;
                         }
                         var doc = new CashOrdersPacketReport(orderList);
                         doc.GeneratePdf(sfd.FileName);
                     }
-                    
+
                     // Открываем созданный общий PDF-пакет за месяц
-                    
+
                     System.Diagnostics.Process.Start(sfd.FileName);
                 }
                 catch (Exception ex)
@@ -243,13 +253,13 @@ namespace ChurchBudget_v3_WPF.Views
                 }
             }
         }
-        
+
         private void TitleBar_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             if (e.ChangedButton == System.Windows.Input.MouseButton.Left)
                 this.DragMove();
         }
-        
+
         private void CloseButton_Click(object sender, RoutedEventArgs e)
         {
             this.Close();

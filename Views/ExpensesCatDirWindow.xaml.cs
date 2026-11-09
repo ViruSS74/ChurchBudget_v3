@@ -1,10 +1,10 @@
-﻿using System;
+﻿using ChurchBudget_v3_WPF.Models;
+using ChurchBudget_v3_WPF.Services;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input; // Добавлено для корректной работы мыши (TitleBar_MouseDown)
-using ChurchBudget_v3_WPF.Models;
-using ChurchBudget_v3_WPF.Services;
 using static ChurchBudget_v3_WPF.Services.ExpensesCategoryService;
 
 namespace ChurchBudget_v3_WPF.Views

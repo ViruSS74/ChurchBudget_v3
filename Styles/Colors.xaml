@@ -1,0 +1,25 @@
+﻿<ResourceDictionary 
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <!-- Ваша оригинальная палитра -->
+    <SolidColorBrush x:Key="ChurchBgColor" Color="#D3D3D3"/>
+    <SolidColorBrush x:Key="ChurchHeaderColor" Color="#8FA882"/>
+    <SolidColorBrush x:Key="ChurchFooterColor" Color="#D3E2CD"/>
+    <SolidColorBrush x:Key="ChurchHeaderTabColor" Color="#D3E2CD"/>
+    <SolidColorBrush x:Key="ChurchTextColor" Color="#013270"/>
+    <SolidColorBrush x:Key="ChurchWindowBorderColor" Color="#013270"/>
+
+    <!-- Оформление таблицы -->
+    <SolidColorBrush x:Key="ChurchGridBg" Color="#FFFFFF"/>
+    <SolidColorBrush x:Key="ChurchGridRowNormal" Color="#FFFFFF"/>
+    <SolidColorBrush x:Key="ChurchGridRowAlternating" Color="#FAFAFA"/>
+
+    <!-- Цвета для кнопок -->
+    <SolidColorBrush x:Key="BtnActiveBg" Color="#8FA882"/>
+    <SolidColorBrush x:Key="BtnHoverBg" Color="#F0F4F8"/>
+    <SolidColorBrush x:Key="BtnDisabledBg" Color="#B2C2AD"/>
+    <SolidColorBrush x:Key="BtnDisabledText" Color="#556B4E"/>
+
+    <!-- Главный шрифт проекта -->
+    <FontFamily x:Key="ChurchFont">Georgia</FontFamily>
+</ResourceDictionary>

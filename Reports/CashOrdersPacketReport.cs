@@ -150,14 +150,14 @@ namespace ChurchBudget_v3_WPF.Reports
                 r.ConstantItem(45).Text("Получил");
                 r.RelativeItem().BorderBottom(1).Text("");
                 r.ConstantItem(110).AlignCenter().Text("(подпись получателя)").FontSize(7f).Italic();
-            }); 
-            
+            });
+
             mainCol.Item().PaddingTop(10).Row(r =>
             {
                 r.ConstantItem(110).Text("Предъявлен документ");
                 r.RelativeItem().BorderBottom(1).Text($" {model.PassportInfo}").FontSize(9);
             });
-            
+
             mainCol.Item().PaddingTop(12).Table(cashierTable =>
             {
                 cashierTable.ColumnsDefinition(columns =>
@@ -169,7 +169,7 @@ namespace ChurchBudget_v3_WPF.Reports
                     columns.ConstantColumn(160);
                     columns.RelativeColumn();
                 });
-                
+
                 cashierTable.Cell().Text("Выдал кассир").FontSize(9.5f);
                 cashierTable.Cell().BorderBottom(1).Text("");
                 cashierTable.Cell().AlignCenter().Text("(подпись)").FontSize(7f).Italic();

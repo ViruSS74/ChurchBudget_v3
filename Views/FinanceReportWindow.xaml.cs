@@ -1,6 +1,7 @@
-﻿using ChurchBudget_v3_WPF.Reports;
+﻿using ChurchBudget;
+using ChurchBudget_v3_WPF.Reports;
 using ChurchBudget_v3_WPF.Services;
-using ChurchBudget;
+using Microsoft.Win32;
 using QuestPDF.Fluent;
 using System;
 using System.Collections.Generic;
@@ -78,9 +79,16 @@ namespace ChurchBudget_v3_WPF.Views
                     Signatures = sigs
                 };
 
-                var doc = new FinancialBudgetReport(model);
+                // 1. Инициализируем наш отчет, передавая модель и строку подключения
+                FinancialBudgetReport document = new FinancialBudgetReport(model, _connString);
+
+                // 2. Вычисляем четкий путь к файлу в корневой папке приложения
                 string filePath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, $"FinancialReport_Year_{year}.pdf");
-                doc.GeneratePdf(filePath);
+
+                // 3. Исправлено: Генерируем PDF напрямую по вычисленному пути filePath (несуществующий saveFileDialog удален)
+                document.GeneratePdf(filePath);
+
+                // 4. Открываем готовый PDF-файл для просмотра или печати
                 System.Diagnostics.Process.Start(filePath);
             }
             catch (Exception ex)
@@ -128,9 +136,16 @@ namespace ChurchBudget_v3_WPF.Views
                     Signatures = sigs
                 };
 
-                var doc = new FinancialBudgetReport(model);
+                // 1. Инициализируем наш отчет, передавая модель и строку подключения
+                FinancialBudgetReport document = new FinancialBudgetReport(model, _connString);
+
+                // 2. Вычисляем четкий путь к файлу
                 string filePath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, $"FinancialReport_Month_{month}_{year}.pdf");
-                doc.GeneratePdf(filePath);
+
+                // 3. Исправлено: Генерируем PDF напрямую по вычисленному пути filePath
+                document.GeneratePdf(filePath);
+
+                // 4. Открываем готовый PDF-файл для просмотра или печати
                 System.Diagnostics.Process.Start(filePath);
             }
             catch (Exception ex)

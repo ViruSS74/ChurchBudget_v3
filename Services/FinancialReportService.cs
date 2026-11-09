@@ -228,8 +228,8 @@ namespace ChurchBudget
                     }
                 }
             }
-            catch 
-            { 
+            catch
+            {
             }
             if (string.IsNullOrEmpty(rectorName)) rectorName = "";
             if (string.IsNullOrEmpty(treasurerName)) treasurerName = "";

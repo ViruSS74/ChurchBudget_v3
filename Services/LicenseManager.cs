@@ -1,10 +1,10 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
+using System.Data.SQLite;
 using System.IO;
 using System.Management;
 using System.Security.Cryptography;
 using System.Text;
-using System.Data.SQLite;
-using Microsoft.Win32;
 
 namespace ChurchBudget_v3_WPF.Services
 {

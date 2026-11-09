@@ -569,9 +569,9 @@ namespace ChurchBudget_v3_WPF.Services
         {
             // 1. Получаем все подписи одной строчкой, используя текущий экземпляр сервиса
             StaffSignatures signatures = this.GetStaffSignatures();
-            
+
             StringBuilder html = new StringBuilder();
-            
+
             using (var conn = new SQLiteConnection(_connectionString))
             {
                 conn.Open();
@@ -671,7 +671,7 @@ namespace ChurchBudget_v3_WPF.Services
                                     { "basis", basis },
                                     { "check_number", checkNum }
                                 });
-                        if (!string.IsNullOrEmpty(checkNum)) hasChecks = true;
+                                if (!string.IsNullOrEmpty(checkNum)) hasChecks = true;
 
                                 if (!string.IsNullOrEmpty(parent))
                                 {
@@ -1633,7 +1633,7 @@ namespace ChurchBudget_v3_WPF.Services
                     }
                 }
             }
-            catch {  }
+            catch { }
             return null;
         }
 

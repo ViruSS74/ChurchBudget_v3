@@ -14,149 +14,149 @@ using System.Windows.Input;
 using static ChurchBudget_v3_WPF.Services.ExpensesCategoryService;
 
 namespace ChurchBudget_v3_WPF.Views
+{
+    public partial class NewExpensesWindows : Window
     {
-        public partial class NewExpensesWindows : Window
+        private readonly ExpensesCategoryService _categoryService;
+        private readonly ListOfDocsService _listOfDocsService;
+        private readonly string _connectionString;
+        private readonly string _receiptsDir;
+        private ObservableCollection<DocExpenseItemUI> _docItems;
+
+        public NewExpensesWindows()
         {
-            private readonly ExpensesCategoryService _categoryService;
-            private readonly ListOfDocsService _listOfDocsService;
-            private readonly string _connectionString;
-            private readonly string _receiptsDir;
-            private ObservableCollection<DocExpenseItemUI> _docItems;
+            InitializeComponent();
+            string dbPath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Data\church.db");
+            _connectionString = string.Format("Data Source={0};Version=3;", dbPath);
+            _categoryService = new ExpensesCategoryService();
+            _listOfDocsService = new ListOfDocsService(dbPath);
+            _receiptsDir = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Receipts");
+            if (!Directory.Exists(_receiptsDir)) Directory.CreateDirectory(_receiptsDir);
 
-            public NewExpensesWindows()
-            {
-                InitializeComponent();
-                string dbPath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Data\church.db");
-                _connectionString = string.Format("Data Source={0};Version=3;", dbPath);
-                _categoryService = new ExpensesCategoryService();
-                _listOfDocsService = new ListOfDocsService(dbPath);
-                _receiptsDir = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Receipts");
-                if (!Directory.Exists(_receiptsDir)) Directory.CreateDirectory(_receiptsDir);
+            _docItems = new ObservableCollection<DocExpenseItemUI>();
+            dgDocumentItems.ItemsSource = _docItems;
+            _docItems.CollectionChanged += (s, e) => UpdateTotalAmount();
+            this.Loaded += NewExpensesWindows_Loaded;
+            dpDocDate.SelectedDateChanged += DpDocDate_SelectedDateChanged;
+        }
 
-                _docItems = new ObservableCollection<DocExpenseItemUI>();
-                dgDocumentItems.ItemsSource = _docItems;
-                _docItems.CollectionChanged += (s, e) => UpdateTotalAmount();
-                this.Loaded += NewExpensesWindows_Loaded;
-                dpDocDate.SelectedDateChanged += DpDocDate_SelectedDateChanged;
-            }
-
-            private void NewExpensesWindows_Loaded(object sender, RoutedEventArgs e)
-            {
-                dpDocDate.SelectedDate = DateTime.Today;
-                LoadCategoryTree();
-                LoadPersonalCombo(); // <- Добавили сюда!
-            }
+        private void NewExpensesWindows_Loaded(object sender, RoutedEventArgs e)
+        {
+            dpDocDate.SelectedDate = DateTime.Today;
+            LoadCategoryTree();
+            LoadPersonalCombo(); // <- Добавили сюда!
+        }
 
         private void DpDocDate_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (dpDocDate.SelectedDate.HasValue && _listOfDocsService != null)
             {
-                if (dpDocDate.SelectedDate.HasValue && _listOfDocsService != null)
-                {
-                    DateTime date = dpDocDate.SelectedDate.Value;
-                    txtDocNumber.Text = _listOfDocsService.GetNextDocNumber(date, "Р");
-                }
+                DateTime date = dpDocDate.SelectedDate.Value;
+                txtDocNumber.Text = _listOfDocsService.GetNextDocNumber(date, "Р");
+            }
+        }
+
+        private void dgCategories_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if (sender is TreeViewItem treeViewItem && !treeViewItem.IsSelected) return;
+            var selectedCat = tvCategories.SelectedItem as ExpensesCategoryUI;
+            if (selectedCat == null) return;
+            if (selectedCat.Children != null && selectedCat.Children.Count > 0) return;
+
+            e.Handled = true;
+
+            if (_docItems.Any(x => x.CategoryId == selectedCat.id))
+            {
+                MessageBox.Show("Эта категория уже добавлена в документ!", "Внимание", MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
             }
 
-            private void dgCategories_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+            var newItem = new DocExpenseItemUI
             {
-                if (sender is TreeViewItem treeViewItem && !treeViewItem.IsSelected) return;
-                var selectedCat = tvCategories.SelectedItem as ExpensesCategoryUI;
-                if (selectedCat == null) return;
-                if (selectedCat.Children != null && selectedCat.Children.Count > 0) return;
+                CategoryId = selectedCat.id,
+                CategoryName = selectedCat.name,
+                Amount = 0m,
+                CheckNumber = string.Empty,
+                Basis = string.Empty,
+                ReceiptPath = string.Empty
+            };
 
-                e.Handled = true;
-
-                if (_docItems.Any(x => x.CategoryId == selectedCat.id))
-                {
-                    MessageBox.Show("Эта категория уже добавлена в документ!", "Внимание", MessageBoxButton.OK, MessageBoxImage.Information);
-                    return;
-                }
-
-                var newItem = new DocExpenseItemUI
-                {
-                    CategoryId = selectedCat.id,
-                    CategoryName = selectedCat.name,
-                    Amount = 0m,
-                    CheckNumber = string.Empty,
-                    Basis = string.Empty,
-                    ReceiptPath = string.Empty
-                };
-
-                newItem.PropertyChanged += (s, args) =>
-                {
-                    if (args.PropertyName == nameof(DocExpenseItemUI.Amount)) UpdateTotalAmount();
-                };
-                _docItems.Add(newItem);
-            }
-
-            private void UpdateTotalAmount()
+            newItem.PropertyChanged += (s, args) =>
             {
-                decimal total = _docItems.Sum(item => item.Amount);
-                txtTotalAmount.Text = total.ToString("N2");
-            }
+                if (args.PropertyName == nameof(DocExpenseItemUI.Amount)) UpdateTotalAmount();
+            };
+            _docItems.Add(newItem);
+        }
 
-            private void dgDocumentItems_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
-            {
-                Dispatcher.BeginInvoke(new Action(() => UpdateTotalAmount()), System.Windows.Threading.DispatcherPriority.Background);
-            }
+        private void UpdateTotalAmount()
+        {
+            decimal total = _docItems.Sum(item => item.Amount);
+            txtTotalAmount.Text = total.ToString("N2");
+        }
 
-            private void CloseButton_Click(object sender, RoutedEventArgs e)
-            {
-                this.DialogResult = false;
-                this.Close();
-            }
+        private void dgDocumentItems_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
+        {
+            Dispatcher.BeginInvoke(new Action(() => UpdateTotalAmount()), System.Windows.Threading.DispatcherPriority.Background);
+        }
 
-            private void TitleBar_MouseDown(object sender, MouseButtonEventArgs e)
-            {
-                if (e.ChangedButton == MouseButton.Left) this.DragMove();
-            }
+        private void CloseButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.DialogResult = false;
+            this.Close();
+        }
 
-            private void txtAmount_PreviewTextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)
-            {
-                if (e.Text == "." || e.Text == ",")
-                {
-                    TextBox textBox = sender as TextBox;
-                    if (textBox != null && !textBox.Text.Contains(",") && !textBox.Text.Contains("."))
-                    {
-                        int caretIndex = textBox.CaretIndex;
-                        textBox.Text = textBox.Text.Insert(caretIndex, ",");
-                        textBox.CaretIndex = caretIndex + 1;
-                    }
-                    e.Handled = true;
-                }
-            }
+        private void TitleBar_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ChangedButton == MouseButton.Left) this.DragMove();
+        }
 
-            private void txtAmount_GotFocus(object sender, RoutedEventArgs e)
+        private void txtAmount_PreviewTextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)
+        {
+            if (e.Text == "." || e.Text == ",")
             {
                 TextBox textBox = sender as TextBox;
-                if (textBox != null) textBox.SelectAll();
-            }
-
-            private void dgDocumentItems_PreparingCellForEdit(object sender, System.Windows.Controls.DataGridPreparingCellForEditEventArgs e)
-            {
-                var textBox = e.EditingElement as TextBox;
-                if (textBox != null)
+                if (textBox != null && !textBox.Text.Contains(",") && !textBox.Text.Contains("."))
                 {
-                    textBox.Focus();
-                    textBox.SelectAll();
-                    textBox.PreviewTextInput -= TableTextBox_PreviewTextInput;
-                    textBox.PreviewTextInput += TableTextBox_PreviewTextInput;
+                    int caretIndex = textBox.CaretIndex;
+                    textBox.Text = textBox.Text.Insert(caretIndex, ",");
+                    textBox.CaretIndex = caretIndex + 1;
                 }
+                e.Handled = true;
             }
+        }
 
-            private void TableTextBox_PreviewTextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)
+        private void txtAmount_GotFocus(object sender, RoutedEventArgs e)
+        {
+            TextBox textBox = sender as TextBox;
+            if (textBox != null) textBox.SelectAll();
+        }
+
+        private void dgDocumentItems_PreparingCellForEdit(object sender, System.Windows.Controls.DataGridPreparingCellForEditEventArgs e)
+        {
+            var textBox = e.EditingElement as TextBox;
+            if (textBox != null)
             {
-                if (e.Text == "." || e.Text == ",")
-                {
-                    var textBox = sender as TextBox;
-                    if (textBox != null && !textBox.Text.Contains(","))
-                    {
-                        int caretIndex = textBox.CaretIndex;
-                        textBox.Text = textBox.Text.Insert(caretIndex, ",");
-                        textBox.CaretIndex = caretIndex + 1;
-                    }
-                    e.Handled = true;
-                }
+                textBox.Focus();
+                textBox.SelectAll();
+                textBox.PreviewTextInput -= TableTextBox_PreviewTextInput;
+                textBox.PreviewTextInput += TableTextBox_PreviewTextInput;
             }
+        }
+
+        private void TableTextBox_PreviewTextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)
+        {
+            if (e.Text == "." || e.Text == ",")
+            {
+                var textBox = sender as TextBox;
+                if (textBox != null && !textBox.Text.Contains(","))
+                {
+                    int caretIndex = textBox.CaretIndex;
+                    textBox.Text = textBox.Text.Insert(caretIndex, ",");
+                    textBox.CaretIndex = caretIndex + 1;
+                }
+                e.Handled = true;
+            }
+        }
 
         // КНОПКА СОХРАНИТЬ РАСХОД + РКО (С новыми полями ФИО, Основание и РКО)
         private void SaveButton_Click(object sender, RoutedEventArgs e)

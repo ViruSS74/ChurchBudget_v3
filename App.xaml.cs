@@ -1,10 +1,10 @@
-﻿using ChurchBudget_v3_WPF.Views;
-using ChurchBudget_v3_WPF.Services;
+﻿using ChurchBudget_v3_WPF.Services;
+using ChurchBudget_v3_WPF.Views;
 using QuestPDF.Infrastructure;
 using System;
-using System.Windows;
 using System.IO;
 using System.Runtime.InteropServices; // ОБЯЗАТЕЛЬНО: для импорта системных функций Win32 API
+using System.Windows;
 
 [assembly: System.Runtime.CompilerServices.SuppressIldasmAttribute()]
 

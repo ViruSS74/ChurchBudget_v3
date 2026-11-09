@@ -245,7 +245,7 @@ namespace ChurchBudget_v3_WPF
             // 3. Открываем окно в модальном режиме
             bpWindow.ShowDialog();
         }
-               
+
         // === Справочники ===
         // === Организации ===
         private void OrganizationDirToolStripMenuItem_Click(object sender, RoutedEventArgs e)
@@ -392,10 +392,10 @@ namespace ChurchBudget_v3_WPF
         }
 
         // === Обновление программы ===
-        private async void MenuUpdate_Click(object sender, RoutedEventArgs e)
+        private async void MenuUpdateToolStripMenuItem_Click(object sender, RoutedEventArgs e)
         {
             // Передаем текущую версию приложения (её можно вынести в константы или читать из сборки)
-            string currentAppVersion = "3.1.123";
+            string currentAppVersion = "3.1.125";
 
             var updater = new UpdateService(currentAppVersion);
 

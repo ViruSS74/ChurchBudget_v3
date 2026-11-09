@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using QuestPDF.Fluent;
+﻿using QuestPDF.Fluent;
 using QuestPDF.Helpers;
 using QuestPDF.Infrastructure;
+using System;
+using System.Collections.Generic;
+using System.Data;
 
 namespace ChurchBudget_v3_WPF.Reports
 {
@@ -235,7 +235,8 @@ namespace ChurchBudget_v3_WPF.Reports
                     string cashierName = _signatures.CashierName;
                     string accountantName = _signatures.AccountantName;
 
-                    c.Item().Row(r => {
+                    c.Item().Row(r =>
+                    {
                         r.ConstantItem(60).Text("Кассир");
                         r.ConstantItem(150).BorderBottom(1).Text("");
                         r.RelativeItem().PaddingLeft(15).Text(cashierName);
@@ -244,12 +245,14 @@ namespace ChurchBudget_v3_WPF.Reports
                     c.Item().PaddingBottom(6).Text("");
 
                     // Количество документов прописью
-                    c.Item().Row(r => {
+                    c.Item().Row(r =>
+                    {
                         r.ConstantItem(330).Text("Записи в кассовой книге проверил и документы в количестве ");
                         r.ConstantItem(150).BorderBottom(1).AlignCenter().Text(ReportHelper.NumberToWords(data.Operations.Rows.Count)).Bold();
                     });
 
-                    c.Item().Row(r => {
+                    c.Item().Row(r =>
+                    {
                         r.ConstantItem(75).Text("приходных и");
                         r.ConstantItem(150).BorderBottom(1).Text("");
                         r.RelativeItem().PaddingLeft(8).Text("расходных получил.");
@@ -257,7 +260,8 @@ namespace ChurchBudget_v3_WPF.Reports
 
                     c.Item().PaddingBottom(6).Text("");
 
-                    c.Item().Row(r => {
+                    c.Item().Row(r =>
+                    {
                         r.ConstantItem(60).Text("Бухгалтер");
                         r.ConstantItem(150).BorderBottom(1).Text("");
                         r.RelativeItem().PaddingLeft(15).Text(accountantName);
@@ -271,21 +275,24 @@ namespace ChurchBudget_v3_WPF.Reports
                     string currentMonthText = data.IsLastInMonth ? "X" : "";
                     string currentYearText = data.IsLastInYear ? "X" : "";
 
-                    c.Item().Row(r => {
+                    c.Item().Row(r =>
+                    {
                         r.RelativeItem().Text("Номер последнего заполненного листа кассовой книги за предыдущий месяц:");
                         r.ConstantItem(25).Border(1).AlignCenter().Text(prevMonthText);
                     });
 
                     c.Item().PaddingBottom(3).Text("");
 
-                    c.Item().Row(r => {
+                    c.Item().Row(r =>
+                    {
                         r.RelativeItem().Text("Последний лист в текущем месяце:");
                         r.ConstantItem(25).Border(1).AlignCenter().Text(currentMonthText).Bold();
                     });
 
                     c.Item().PaddingBottom(3).Text("");
 
-                    c.Item().Row(r => {
+                    c.Item().Row(r =>
+                    {
                         r.RelativeItem().Text("Последний лист в текущем году:");
                         r.ConstantItem(25).Border(1).AlignCenter().Text(currentYearText).Bold();
                     });
@@ -308,7 +315,8 @@ namespace ChurchBudget_v3_WPF.Reports
                 col.Item().DefaultTextStyle(x => x.FontSize(8).FontFamily("Times New Roman"));
 
                 col.Item().Text("В настоящей книге пронумеровано,\nпрошнуровано").AlignCenter();
-                col.Item().Row(r => {
+                col.Item().Row(r =>
+                {
                     r.ConstantItem(90).Text("и печатью скреплено");
                     r.RelativeItem().BorderBottom(1).AlignCenter().Text(stampOrgName).Bold().FontSize(8.5f);
                     r.ConstantItem(40).Text(" листов.");
@@ -317,7 +325,8 @@ namespace ChurchBudget_v3_WPF.Reports
                 // Уменьшили высоту отступов до 4 и 2 пикселей
                 col.Item().PaddingBottom(4).Text("");
 
-                col.Item().Row(r => {
+                col.Item().Row(r =>
+                {
                     r.ConstantItem(65).Text("Настоятель:");
                     r.RelativeItem().BorderBottom(1).Text("");
                     r.ConstantItem(90).PaddingLeft(2).Text(rector).FontSize(8.5f);
@@ -325,7 +334,8 @@ namespace ChurchBudget_v3_WPF.Reports
 
                 col.Item().PaddingBottom(2).Text("");
 
-                col.Item().Row(r => {
+                col.Item().Row(r =>
+                {
                     r.ConstantItem(65).Text("Казначей:");
                     r.RelativeItem().BorderBottom(1).Text("");
                     r.ConstantItem(90).PaddingLeft(2).Text(accountant).FontSize(8.5f);
