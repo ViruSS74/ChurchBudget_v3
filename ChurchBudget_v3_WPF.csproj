@@ -246,6 +246,18 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="Reports\CashOrderInReport.cs" />
+    <Content Include="Support\SumatraPDF-3.6.1.exe">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Support\Support_Win7orHigh\2_Net472-x86-x64.exe">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Support\Support_Win7orHigh\1_kb4474419-x86_Win7.msu">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Support\Прочти меня.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Resource Include="Graph\Icons\about.png" />
     <Resource Include="Graph\Icons\accept.png" />
     <Resource Include="Graph\Icons\add.png" />
@@ -330,7 +342,6 @@
     <Folder Include="bin\" />
     <Folder Include="Data\Archive\" />
     <Folder Include="Receipts\" />
-    <Folder Include="Support\" />
     <Folder Include="Templates\" />
     <Folder Include="ViewModels\" />
   </ItemGroup>

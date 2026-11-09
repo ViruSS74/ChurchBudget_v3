@@ -3,7 +3,9 @@
     <Platform Name="Any CPU" />
     <Platform Name="x86" />
   </Configurations>
-  <Project Path="../ChurchBudget.Updater/ChurchBudget.Updater.csproj" Id="8e399b6f-7f84-4e1d-861c-3f96a7c8d39d" />
+  <Project Path="../ChurchBudget.Updater/ChurchBudget.Updater.csproj" Id="8e399b6f-7f84-4e1d-861c-3f96a7c8d39d">
+    <Build Solution="Debug|x86" Project="false" />
+  </Project>
   <Project Path="ChurchBudget_v3_WPF.csproj" Id="591a1fe6-20da-49ec-94dc-7c85e960eb82">
     <Platform Solution="*|x86" Project="x86" />
   </Project>
