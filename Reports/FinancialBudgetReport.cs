@@ -179,14 +179,13 @@ namespace ChurchBudget_v3_WPF.Reports
                     // --- 2. ДОХОДЫ ---
                     AddHeaderRow("2", "Доходы (поступления)");
                     table.Cell().Border(1).Text(""); table.Cell().Border(1).Text("   в т.ч (статьи доходов):").Italic(); table.Cell().Border(1).Text(""); table.Cell().Border(1).Text("");
-
                     AddDataRow("Скарбонка", "INC_BOX", _model.IncomeByCode);
                     AddDataRow("Крещение", "INC_BAPTISM", _model.IncomeByCode);
                     AddDataRow("Отпевание", "INC_FUNER", _model.IncomeByCode);
                     AddDataRow("Венчание", "INC_WED", _model.IncomeByCode);
                     AddDataRow("Свечи", "INC_CANDLES", _model.IncomeByCode);
                     AddDataRow("Церковная утварь", "INC_UTEN", _model.IncomeByCode);
-                    AddDataRow("Literature", "INC_BOOKS", _model.IncomeByCode);
+                    AddDataRow("Литература", "INC_BOOKS", _model.IncomeByCode);
                     AddDataRow("Изделия из драгоценных металлов религиозного назначения", "INC_GOLD", _model.IncomeByCode);
                     AddDataRow("Записки", "INC_NOTES", _model.IncomeByCode);
                     AddDataRow("Благотворительная помощь (без предоставления отчета)", "INC_CHARHELP", _model.IncomeByCode);
@@ -198,9 +197,11 @@ namespace ChurchBudget_v3_WPF.Reports
                     table.Cell().Border(1).Text(" Итого поступило за период (по стр. 2)").Bold();
                     table.Cell().Border(1).AlignRight().Text(totalIncome.ToString("F2") + " ").Bold();
                     table.Cell().Border(1).Text("");
+                    
                     // --- 3. РАСХОДЫ ---
                     AddHeaderRow("3", "Расходы");
                     table.Cell().Border(1).Text(""); table.Cell().Border(1).Text("   в т.ч (статьи расходов):").Italic(); table.Cell().Border(1).Text(""); table.Cell().Border(1).Text("");
+                    
                     // 1. Коммунальные
                     AddParentCalculatedRow("1. Коммунальные и платежи", new[] { "EXP_ELECTR", "EXP_HEAT", "EXP_WATER", "EXP_LINK", "EXP_OTHERS", "EXP_COMM" }, _model.ExpenseByCode);
                     AddDataRow("Электроэнергия", "EXP_ELECTR", _model.ExpenseByCode);
@@ -208,14 +209,18 @@ namespace ChurchBudget_v3_WPF.Reports
                     AddDataRow("Вода и канализация", "EXP_WATER", _model.ExpenseByCode);
                     AddDataRow("Связь (телефон, интернет)", "EXP_LINK", _model.ExpenseByCode);
                     AddDataRow("Другие расходы", "EXP_OTHERS", _model.ExpenseByCode);
+                    
                     // 2. Транспортные
                     AddParentCalculatedRow("2. Транспортные расходы (топливо, запчасти, оплата страхового полиса, дорожный сбор)", new[] { "EXP_FUEL", "EXP_SPARE", "EXP_INSURE", "EXP_RTOLL", "EXP_TRANSP" }, _model.ExpenseByCode);
+                    
                     // 3. Хозяйственные
                     AddDataRow("3. Хозяйственные расходы", "EXP_HOUSE", _model.ExpenseByCode, false);
+                    
                     // 4. Ремонтно-строительные
                     AddParentCalculatedRow("4. Ремонтно-строительные работы", new[] { "EXP_BUILD", "EXP_BUILDPAY", "EXP_REPL" }, _model.ExpenseByCode);
                     AddDataRow("Стройматериалы", "EXP_BUILD", _model.ExpenseByCode);
                     AddDataRow("Оплата за строительные работы", "EXP_BUILDPAY", _model.ExpenseByCode);
+                    
                     // 5. Церковная лавка
                     AddParentCalculatedRow("5. Церковная лавка", new[] { "EXP_CANDLES", "EXP_CHUTEN", "EXP_BOOKS", "EXP_GOLD", "EXP_OTHERPROD", "EXP_SHOP" }, _model.ExpenseByCode);
                     AddDataRow("Свечи", "EXP_CANDLES", _model.ExpenseByCode);
@@ -223,18 +228,22 @@ namespace ChurchBudget_v3_WPF.Reports
                     AddDataRow("Литература", "EXP_BOOKS", _model.ExpenseByCode);
                     AddDataRow("Изделия из драгоценных металлов религиозного назначения", "EXP_GOLD", _model.ExpenseByCode);
                     AddDataRow("Прочие изделия", "EXP_OTHERPROD", _model.ExpenseByCode);
+                    
                     // 6. Расходы на оплату труда
                     AddParentCalculatedRow("6. Расходы на оплату труда", new[] { "EXP_PAYM", "EXP_TAX", "EXP_FINSUP" }, _model.ExpenseByCode);
                     AddDataRow("Зарплата", "EXP_PAYM", _model.ExpenseByCode);
                     AddDataRow("Налоги", "EXP_TAX", _model.ExpenseByCode);
                     AddDataRow("Материальная поддержка", "EXP_FINSUP", _model.ExpenseByCode);
+                    
                     // 7. Благотворительность
                     AddDataRow("7. Благотворительная помощь", "EXP_CHAR", _model.ExpenseByCode, false);
+                    
                     // 8. Взносы
                     AddParentCalculatedRow("8. Взносы", new[] { "EXP_DIOCONTR", "EXP_ADDCONTR", "EXP_OTHERCONTR", "EXP_CONTR" }, _model.ExpenseByCode);
                     AddDataRow("Епархиальные взносы", "EXP_DIOCONTR", _model.ExpenseByCode);
                     AddDataRow("Дополнительный взнос", "EXP_ADDCONTR", _model.ExpenseByCode);
                     AddDataRow("Прочие взносы", "EXP_OTHERCONTR", _model.ExpenseByCode);
+                    
                     // 9-17 Остальные категории расходов
                     AddDataRow("9. Расходы на организацию и проведение праздничных приходских и прочих мероприятий...", "EXP_HOLD", _model.ExpenseByCode, false);
                     AddDataRow("10. Расходы на содержание библиотеки", "EXP_LIB", _model.ExpenseByCode, false);
@@ -245,6 +254,7 @@ namespace ChurchBudget_v3_WPF.Reports
                     AddDataRow("15. Расходы на командировки, сессии, паломнические поездки", "EXP_BISTRIP", _model.ExpenseByCode, false);
                     AddDataRow("16. Расходы на оплату технической документации, проектной документации и др.", "EXP_TECHDOC", _model.ExpenseByCode, false);
                     AddDataRow("17. Прочие расходы", "EXP_OTHER", _model.ExpenseByCode, false);
+                    
                     // --- ИТОГИ ---
                     decimal totalExpense = 0; foreach (var v in _model.ExpenseByCode.Values) totalExpense += v;
                     table.Cell().Border(1).Text("");
@@ -256,6 +266,7 @@ namespace ChurchBudget_v3_WPF.Reports
                     table.Cell().Border(1).AlignRight().Text(_model.ClosingBalance.ToString("F2") + " ").Bold();
                     table.Cell().Border(1).Text("");
                 });
+                    
                     // === 3. ПОДПИСИ СТОРОН ===
                     column.Item().PaddingTop(25).Column(c =>
                     {
