@@ -168,7 +168,6 @@ namespace ChurchBudget_v3_WPF.Views
                 MessageBox.Show("Пожалуйста, выберите дату документа!", "Внимание", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
-
             using (var conn = new SQLiteConnection(_connectionString))
             {
                 try
@@ -179,17 +178,15 @@ namespace ChurchBudget_v3_WPF.Views
                         MessageBox.Show("Документ с таким номером уже существует!", "Внимание", MessageBoxButton.OK, MessageBoxImage.Warning);
                         return;
                     }
-
                     using (var trans = conn.BeginTransaction())
                     {
                         try
                         {
                             decimal currentTotalSum = _docItems.Sum(item => item.Amount);
-
                             // A. Вставка в expense_docs (Включая новые поля person_name и main_basis)
                             string sqlDoc = @"INSERT INTO expense_docs (doc_number, date, total, person_name, main_basis) 
-                                      VALUES (@n, @d, @t, @pName, @mBasis); 
-                                      SELECT last_insert_rowid();";
+                              VALUES (@n, @d, @t, @pName, @mBasis); 
+                              SELECT last_insert_rowid();";
                             long docId;
                             using (var cmdDoc = new SQLiteCommand(sqlDoc, conn, trans))
                             {
@@ -200,19 +197,16 @@ namespace ChurchBudget_v3_WPF.Views
                                 cmdDoc.Parameters.AddWithValue("@mBasis", txtMainBasis.Text.Trim());
                                 docId = Convert.ToInt64(cmdDoc.ExecuteScalar());
                             }
-
                             // Явно прописываем системные списки для чеков и оснований
                             System.Collections.Generic.List<string> basisList = new System.Collections.Generic.List<string>();
                             System.Collections.Generic.List<string> checkList = new System.Collections.Generic.List<string>();
-
                             // Б. Вставка строк в expense_items
                             foreach (var item in _docItems)
                             {
                                 if (!string.IsNullOrEmpty(item.Basis) && !basisList.Contains(item.Basis)) basisList.Add(item.Basis);
                                 if (!string.IsNullOrEmpty(item.CheckNumber) && !checkList.Contains(item.CheckNumber)) checkList.Add(item.CheckNumber);
-
                                 string sqlItem = @"INSERT INTO expense_items (doc_id, category, amount, description, check_number, basis) 
-                                           VALUES (@id, @c, @a, @desc, @check, @basis)";
+                                   VALUES (@id, @c, @a, @desc, @check, @basis)";
                                 using (var cmdItem = new SQLiteCommand(sqlItem, conn, trans))
                                 {
                                     cmdItem.Parameters.AddWithValue("@id", docId);
@@ -224,7 +218,6 @@ namespace ChurchBudget_v3_WPF.Views
                                     cmdItem.ExecuteNonQuery();
                                 }
                             }
-
                             // Формируем основание для РКО
                             string finalBasis = txtMainBasis.Text.Trim();
                             if (string.IsNullOrEmpty(finalBasis))
@@ -233,13 +226,21 @@ namespace ChurchBudget_v3_WPF.Views
                                 finalBasis = string.Join("; ", basisList);
                                 if (string.IsNullOrEmpty(finalBasis)) finalBasis = "Хозяйственные расходы по документу №" + txtDocNumber.Text.Trim();
                             }
-
                             string allChecks = string.Join("; ", checkList);
 
-                            // В. Создание РКО на основе новых параметров из шапки ведомости
+                            // =========================================================================
+                            // В. Создание РКО на основе новых параметров из шапки ведомости (ИСПРАВЛЕНО)
+                            // =========================================================================
+
+                            // 1. Извлекаем числовой ID выбранного из списка сотрудника
+                            object selectedEmpId = cmbMainPerson.SelectedValue != null ? cmbMainPerson.SelectedValue : DBNull.Value;
+
                             string rkoNumber = txtDocNumber.Text.Trim().Replace("Р-", "РКО-");
-                            string sqlRKO = @"INSERT INTO cash_orders (order_type, order_number, doc_ref_id, date, amount, base, appendix, person_name_manual)
-                                      VALUES ('РКО', @rNum, @refId, @date, @amt, @base, @app, @pName)";
+
+                            // Добавили поле person_id и параметр @pId в запрос INSERT ниже:
+                            string sqlRKO = @"INSERT INTO cash_orders (order_type, order_number, doc_ref_id, date, amount, base, appendix, person_name_manual, person_id)
+                              VALUES ('РКО', @rNum, @refId, @date, @amt, @base, @app, @pName, @pId)";
+
                             using (var cmdRko = new SQLiteCommand(sqlRKO, conn, trans))
                             {
                                 cmdRko.Parameters.AddWithValue("@rNum", rkoNumber);
@@ -249,12 +250,14 @@ namespace ChurchBudget_v3_WPF.Views
                                 cmdRko.Parameters.AddWithValue("@base", finalBasis);
                                 cmdRko.Parameters.AddWithValue("@app", string.IsNullOrEmpty(allChecks) ? (object)DBNull.Value : allChecks);
                                 cmdRko.Parameters.AddWithValue("@pName", string.IsNullOrWhiteSpace(cmbMainPerson.Text) ? (object)DBNull.Value : cmbMainPerson.Text.Trim());
+
+                                // Передаем числовой ID сотрудника в базу данных ордеров
+                                cmdRko.Parameters.AddWithValue("@pId", selectedEmpId);
+
                                 cmdRko.ExecuteNonQuery();
                             }
-
                             trans.Commit();
                             MessageBox.Show($"Документ №{txtDocNumber.Text} и РКО №{rkoNumber} успешно сохранены!", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
-
                             ResetFormForNewDocument();
                         }
                         catch (Exception ex)
@@ -363,7 +366,10 @@ namespace ChurchBudget_v3_WPF.Views
 
             cmbMainPerson.ItemsSource = staffList;
             cmbMainPerson.DisplayMemberPath = "FullName";
-            cmbMainPerson.SelectedValuePath = "FullName";
+            // БЫЛО: cmbMainPerson.SelectedValuePath = "FullName";
+            // СТАЛО: комбобокс должен возвращать числовой Id, а не текст!
+            cmbMainPerson.SelectedValuePath = "Id";
+
         }
     }
 }

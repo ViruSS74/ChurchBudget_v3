@@ -213,27 +213,58 @@ namespace ChurchBudget_v3_WPF.Views
                     actualOrderId = Convert.ToInt32(_orderRow["id"]);
                 }
 
+                string fullTextName = txtPerson.Text.Trim(); // Получаем ФИО текстом
+                object selectedEmpId = DBNull.Value;
+
                 using (var conn = new System.Data.SQLite.SQLiteConnection($"Data Source={dbPath};Version=3;"))
                 {
                     conn.Open();
+
+                    // БРОНЕБОЙНЫЙ ПОИСК ID: Чистим скрытые пробелы функцией TRIM и используем мягкий LIKE
+                    if (!string.IsNullOrEmpty(fullTextName))
+                    {
+                        try
+                        {
+                            string sqlFindId = @"
+                SELECT id FROM personal 
+                WHERE TRIM(last_name || ' ' || first_name || ' ' || middle_name) LIKE @fullName
+                LIMIT 1;";
+
+                            using (var cmdFind = new SQLiteCommand(sqlFindId, conn))
+                            {
+                                // Знак % застрахует поиск, даже если в базе у отчества стоят лишние пробелы!
+                                cmdFind.Parameters.AddWithValue("@fullName", fullTextName + "%");
+                                var resId = cmdFind.ExecuteScalar();
+                                if (resId != null)
+                                {
+                                    selectedEmpId = Convert.ToInt32(resId);
+                                }
+                            }
+                        }
+                        catch { /* Справочник не нашел совпадений */ }
+                    }
+
                     string sql = "";
 
-                    // 2. Если запись ордера существует в БД — делаем UPDATE по настоящему actualOrderId
+                    // 2. Если запись ордера существует в БД — делаем UPDATE
                     if (actualOrderId > 0)
                     {
+                        // Принудительно сохраняем person_id, который мы только что нашли по тексту!
                         sql = @"
-                    UPDATE cash_orders 
-                    SET person_name_manual = @person, 
-                        base = @basis, 
-                        appendix = @appendix 
-                    WHERE id = @orderId;";
+            UPDATE cash_orders 
+            SET person_name_manual = @person, 
+                base = @basis, 
+                appendix = @appendix,
+                person_id = @personId
+            WHERE id = @orderId;";
 
                         using (var cmd = new System.Data.SQLite.SQLiteCommand(sql, conn))
                         {
-                            cmd.Parameters.AddWithValue("@person", txtPerson.Text.Trim());
+                            cmd.Parameters.AddWithValue("@person", fullTextName);
                             cmd.Parameters.AddWithValue("@basis", txtBasis.Text.Trim());
                             cmd.Parameters.AddWithValue("@appendix", txtAppendix.Text.Trim());
-                            cmd.Parameters.AddWithValue("@orderId", actualOrderId); // Используем правильный ID ордера!
+                            cmd.Parameters.AddWithValue("@personId", selectedEmpId); // Числовой ID уходит в базу!
+                            cmd.Parameters.AddWithValue("@orderId", actualOrderId);
 
                             cmd.ExecuteNonQuery();
                         }
@@ -241,10 +272,9 @@ namespace ChurchBudget_v3_WPF.Views
                     else
                     {
                         // 3. СТРАХОВКА: Если записи в cash_orders ещё не было, создаем её (INSERT)
-                        // Связываем новый ордер с родительским документом через document_id = _docId
                         sql = @"
-                    INSERT INTO cash_orders (document_id, type, number, date, person, base, appendix, person_name_manual) 
-                    VALUES (@docId, @type, @num, @date, @person, @basis, @appendix, @person);";
+            INSERT INTO cash_orders (document_id, type, number, date, person, base, appendix, person_name_manual, person_id) 
+            VALUES (@docId, @type, @num, @date, @person, @basis, @appendix, @person, @personId);";
 
                         using (var cmd = new System.Data.SQLite.SQLiteCommand(sql, conn))
                         {
@@ -252,9 +282,10 @@ namespace ChurchBudget_v3_WPF.Views
                             cmd.Parameters.AddWithValue("@type", _docType);
                             cmd.Parameters.AddWithValue("@num", _docNumber);
                             cmd.Parameters.AddWithValue("@date", _docDate.ToString("yyyy-MM-dd HH:mm:ss"));
-                            cmd.Parameters.AddWithValue("@person", txtPerson.Text.Trim());
+                            cmd.Parameters.AddWithValue("@person", fullTextName);
                             cmd.Parameters.AddWithValue("@basis", txtBasis.Text.Trim());
                             cmd.Parameters.AddWithValue("@appendix", txtAppendix.Text.Trim());
+                            cmd.Parameters.AddWithValue("@personId", selectedEmpId);
 
                             cmd.ExecuteNonQuery();
                         }
@@ -265,7 +296,7 @@ namespace ChurchBudget_v3_WPF.Views
                 _orderRow = _service.GetCashOrderRow(_docId);
 
                 // Направляем обновленный текст на правый бланк просмотра
-                if (lblBlankPerson != null) lblBlankPerson.Text = txtPerson.Text;
+                if (lblBlankPerson != null) lblBlankPerson.Text = fullTextName;
                 if (lblBlankBasis != null) lblBlankBasis.Text = txtBasis.Text;
                 if (lblBlankAppendix != null) lblBlankAppendix.Text = string.IsNullOrEmpty(txtAppendix.Text) ? "Не указано" : txtAppendix.Text;
 

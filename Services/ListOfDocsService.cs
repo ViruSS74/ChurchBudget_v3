@@ -1266,27 +1266,39 @@ namespace ChurchBudget_v3_WPF.Services
 
         public DataTable GetRkoReportData(int rkoId)
         {
-            // ИСПРАВЛЕНА СВЯЗЬ: idd.employee_id теперь правильно привязывается к p.id (сотруднику)
-            string sql = string.Format(@"
-        SELECT
-            co.order_number AS [No],
-            co.date AS [Date],
-            co.amount AS [Sum],
-            CASE
-                WHEN p.id IS NOT NULL THEN (p.last_name || ' ' || p.first_name || ' ' || p.middle_name)
-                ELSE co.person_name_manual
-            END AS [Recipient],
-            (COALESCE(td.name, 'Паспорт') || ' ' || COALESCE(idd.series, '') || ' ' || idd.number || ', выдан ' || COALESCE(idd.issued_by, '') || ' ' || IFNULL(STRFTIME('%d.%m.%Y', idd.issue_date), '')) AS [Passport],
-            p.role AS [RecipientRole],
-            co.base AS [Basis],
-            co.appendix AS [Appendix],
-            'BYN' AS [CurrencyCode],
-            'Белорусский рубль' AS [CurrencyName]
-        FROM cash_orders co
-        LEFT JOIN personal p ON co.person_id = p.id
-        LEFT JOIN id_documents idd ON p.id = idd.employee_id
-        LEFT JOIN type_id_document td ON idd.type_id_doc = td.id
-        WHERE co.id = {0}", rkoId);
+            // Строгая привязка: ищем документ строго для указанного получателя (по ID или по точному совпадению ФИО).
+            // Если получатель не указан или у него нет документа в id_documents — поле Passport будет пустым.
+            string sql = $@"
+    SELECT
+        co.order_number AS [No],
+        co.date AS [Date],
+        co.amount AS [Sum],
+        COALESCE(
+            NULLIF(TRIM(co.person_name_manual), ''), 
+            (p.last_name || ' ' || p.first_name || ' ' || p.middle_name)
+        ) AS [Recipient],
+        
+        CASE 
+            WHEN idd.id IS NOT NULL THEN 
+                (COALESCE(td.name, 'Паспорт') || ' ' || COALESCE(idd.series, '') || ' ' || COALESCE(idd.number, '') || ', выдан ' || COALESCE(idd.issued_by, '') || ' ' || COALESCE(idd.issue_date, ''))
+            ELSE '' 
+        END AS [Passport],
+        
+        p.role AS [RecipientRole],
+        co.base AS [Basis],
+        co.appendix AS [Appendix],
+        'BYN' AS [CurrencyCode],
+        'Белорусский рубль' AS [CurrencyName]
+    FROM cash_orders co
+    LEFT JOIN personal p ON 
+        -- 1. Связь по прямому ID сотрудника, если он записан в ордере
+        (co.person_id IS NOT NULL AND co.person_id > 0 AND co.person_id = p.id)
+        OR 
+        -- 2. Связь по совпадению ФИО (Фамилия Имя Отчество) с защитой от лишних пробелов
+        (TRIM(co.person_name_manual) != '' AND TRIM(p.last_name || ' ' || p.first_name || ' ' || p.middle_name) LIKE TRIM(co.person_name_manual) || '%')
+    LEFT JOIN id_documents idd ON p.id = idd.employee_id
+    LEFT JOIN type_id_document td ON idd.type_id_doc = td.id
+    WHERE co.id = {rkoId}";
 
             return ExecuteDataTable(sql);
         }

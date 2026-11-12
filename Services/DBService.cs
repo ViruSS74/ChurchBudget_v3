@@ -51,6 +51,22 @@ namespace ChurchBudget_v3_WPF.Services
         // 3. Главный метод наката обновлений структуры и справочников
         public void RunDatabaseMigrations()
         {
+            // === ТОТАЛЬНОЕ ВЫРАВНИВАНИЕ СТРУКТУРЫ: Приводим БД_2 к 100% стандарту БД_1 ===
+
+            // 1. Исправляем таблицу кассовых ордеров (задаем дефолтные пустые строки, чтобы код не падал)
+            try { ExecuteMigrationSql("ALTER TABLE cash_orders ADD COLUMN person_id INTEGER;"); } catch { }
+            try { ExecuteMigrationSql("ALTER TABLE cash_orders ADD COLUMN person_name_manual TEXT DEFAULT '';"); } catch { }
+            try { ExecuteMigrationSql("ALTER TABLE cash_orders ADD COLUMN appendix TEXT DEFAULT '';"); } catch { }
+
+            // 2. Исправляем таблицу расходных документов (добавляем паспортные поля со стандартом по умолчанию)
+            try { ExecuteMigrationSql("ALTER TABLE expense_docs ADD COLUMN person_name TEXT DEFAULT '';"); } catch { }
+            try { ExecuteMigrationSql("ALTER TABLE expense_docs ADD COLUMN main_basis TEXT DEFAULT '';"); } catch { }
+
+            // 3. Исправляем таблицу приходных документов
+            try { ExecuteMigrationSql("ALTER TABLE income_docs ADD COLUMN person_name TEXT DEFAULT '';"); } catch { }
+            try { ExecuteMigrationSql("ALTER TABLE income_docs ADD COLUMN main_basis TEXT DEFAULT '';"); } catch { }
+
+            // === СТАНДАРТНЫЕ МИГРАЦИИ ПО ВЕРСИЯМ ===
             try
             {
                 string currentVersion = GetDatabaseVersion();
@@ -86,8 +102,6 @@ namespace ChurchBudget_v3_WPF.Services
                     ExecuteMigrationSql("UPDATE db_version SET version = '1.2';");
                     currentVersion = "1.2";
                 }
-
-                // Сюда в будущем будете дописывать: if (currentVersion == "1.2") { ... }
             }
             catch (Exception ex)
             {
