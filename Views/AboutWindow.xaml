@@ -81,7 +81,7 @@
                 <ScrollViewer Grid.Column="1" VerticalScrollBarVisibility="Auto" Padding="5,0,0,0">
                     <StackPanel>
                         <TextBlock Text="Управление церковным бюджетом" FontSize="15" FontWeight="Bold" Foreground="#013270" HorizontalAlignment="Center" Margin="0,0,0,2"/>
-                        <TextBlock Text="Версия 3.1.95 (2026 год)" FontSize="10" FontStyle="Italic" Foreground="Gray" HorizontalAlignment="Center" Margin="0,0,0,15"/>
+                        <TextBlock Text="Версия 3.1.126 (2026 год)" FontSize="10" FontStyle="Italic" Foreground="Gray" HorizontalAlignment="Center" Margin="0,0,0,15"/>
 
                         <TextBlock Text="О программе" FontSize="12" FontWeight="Bold" Margin="0,0,0,6"/>
                         <TextBlock Text="Программа предназначена для автоматизации оперативного учета доходов и расходов религиозных организаций (приходов храмов)." TextWrapping="Wrap" Margin="0,0,0,10"/>
@@ -100,6 +100,10 @@
                                 viruss954@gmail.com
                             </Hyperlink>
                         </TextBlock>
+                        
+                        <!-- Авторы -->
+                        <TextBlock Text="Авторы:" FontSize="12" FontStyle="Italic" FontWeight="Bold" Margin="0,20,0,2"/>
+                        <TextBlock Text="@ Viru$$ and Gemini AI" FontSize="10" Foreground="Gray" Margin="0,5,0,2"/>
                     </StackPanel>
                 </ScrollViewer>
             </Grid>

@@ -426,36 +426,58 @@ namespace ChurchBudget_v3_WPF.Views
                     // === ЕСЛИ ЭТО РКО ===
                     else if (_docType == "РКО")
                     {
-                        // ИСПРАВЛЕНО: Убрали DateTime, так как переменная orderDate уже создана выше
+                        // Убрали DateTime, так как переменная orderDate уже создана выше
                         orderDate = _docDate;
                         if (_orderRow != null && _orderRow.Table.Columns.Contains("date") && _orderRow["date"] != DBNull.Value)
                         {
                             DateTime.TryParse(_orderRow["date"].ToString(), out orderDate);
                         }
 
-                        // ИСПРАВЛЕНО: Убрали decimal, так как переменная orderAmount уже создана выше
+                        // Убрали decimal, так как переменная orderAmount уже создана выше
                         orderAmount = 0;
                         if (_orderRow != null && _orderRow.Table.Columns.Contains("amount") && _orderRow["amount"] != DBNull.Value)
                         {
                             orderAmount = Convert.ToDecimal(_orderRow["amount"]);
                         }
 
-                        // Автоматически выгружаем паспортные данные получателя (согласно архитектуре вашей БД)
+                        // Автоматически выгружаем паспортные данные строго для указанного получателя (по ФИО)
                         string dbPassportInfo = "";
-                        using (var conn = new System.Data.SQLite.SQLiteConnection($"Data Source={dbPath};Version=3;"))
+                        string recipientName = txtPerson.Text.Trim();
+
+                        if (!string.IsNullOrEmpty(recipientName))
                         {
-                            conn.Open();
-                            string sqlPass = @"SELECT td.name as doc_type, series, number, issued_by, issue_date 
-                           FROM id_documents idd 
-                           LEFT JOIN type_id_document td ON idd.type_id_doc = td.id 
-                           WHERE employee_id = 2 LIMIT 1"; // Дефолтный паспорт Настоятеля
-                            using (var cmdP = new System.Data.SQLite.SQLiteCommand(sqlPass, conn))
-                            using (var rdrP = cmdP.ExecuteReader())
+                            using (var conn = new System.Data.SQLite.SQLiteConnection($"Data Source={dbPath};Version=3;"))
                             {
-                                if (rdrP.Read())
+                                conn.Open();
+                                string sqlPass = @"
+            SELECT td.name as doc_type, idd.series, idd.number, idd.issued_by, idd.issue_date 
+            FROM personal p
+            JOIN id_documents idd ON p.id = idd.employee_id
+            LEFT JOIN type_id_document td ON idd.type_id_doc = td.id 
+            WHERE TRIM(p.last_name || ' ' || p.first_name || ' ' || p.middle_name) LIKE @fullName
+            LIMIT 1;";
+
+                                using (var cmdP = new System.Data.SQLite.SQLiteCommand(sqlPass, conn))
                                 {
-                                    string pDate = rdrP["issue_date"] != DBNull.Value ? Convert.ToDateTime(rdrP["issue_date"]).ToString("dd.MM.yyyy") : "";
-                                    dbPassportInfo = $"{rdrP["doc_type"]} {rdrP["series"]} {rdrP["number"]}, выдан {rdrP["issued_by"]} {pDate} г.";
+                                    cmdP.Parameters.AddWithValue("@fullName", recipientName + "%");
+                                    using (var rdrP = cmdP.ExecuteReader())
+                                    {
+                                        if (rdrP.Read())
+                                        {
+                                            string pDate = "";
+                                            if (rdrP["issue_date"] != DBNull.Value && DateTime.TryParse(rdrP["issue_date"].ToString(), out DateTime dt))
+                                            {
+                                                pDate = dt.ToString("dd.MM.yyyy") + " г.";
+                                            }
+                                            else if (rdrP["issue_date"] != DBNull.Value)
+                                            {
+                                                pDate = rdrP["issue_date"].ToString();
+                                            }
+
+                                            string docType = rdrP["doc_type"] != DBNull.Value ? rdrP["doc_type"].ToString() : "Паспорт";
+                                            dbPassportInfo = $"{docType} {rdrP["series"]} {rdrP["number"]}, выдан {rdrP["issued_by"]} {pDate}".Trim();
+                                        }
+                                    }
                                 }
                             }
                         }
