@@ -86,12 +86,6 @@ namespace ChurchBudget_v3_WPF.Reports
             });
         }
 
-        private void ComposeActivePages(IDocumentContainer container)
-        {
-            // На уровне контейнера определяем размер (Landscape для страниц)
-            var size = PageSizes.A4.Landscape();
-        }
-
         private void ComposeActivePages(IContainer container)
         {
             container.Column(col =>

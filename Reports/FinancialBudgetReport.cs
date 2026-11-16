@@ -10,40 +10,44 @@ namespace ChurchBudget_v3_WPF.Reports
     public class FinancialBudgetReport : IDocument
     {
         private readonly BudgetReportModel _model;
-
-        // Строка подключения к БД, которую мы передадим из окна при создании отчета
         private readonly string _connectionString;
+        private readonly DateTime _startDate;
+        private readonly DateTime _endDate;
 
-        // Обновленный конструктор: теперь он принимает модель и строку подключения
-        public FinancialBudgetReport(BudgetReportModel model, string connectionString)
+        // 1. Обновленный конструктор: теперь принимает границы выбранного периода!
+        public FinancialBudgetReport(BudgetReportModel model, string connectionString, DateTime startDate, DateTime endDate)
         {
             _model = model;
             _connectionString = connectionString;
+            _startDate = startDate;
+            _endDate = endDate;
 
-            // СРАЗУ при создании отчета принудительно лечим и пересчитываем расходы из базы данных,
-            // полностью подменяя кривой словарь из старой DLL на наш точный расчет!
             LoadCorrectExpensesFromDatabase();
         }
 
         public DocumentMetadata GetMetadata() => DocumentMetadata.Default;
         public DocumentSettings GetSettings() => DocumentSettings.Default;
 
-        // Наш собственный, независимый метод сбора расходов напрямую по числовым ID
         private void LoadCorrectExpensesFromDatabase()
         {
             if (string.IsNullOrEmpty(_connectionString)) return;
 
-            // Наш точный SQL-запрос, который связывает таблицы по числовому ID (ei.category = ec.id),
-            // полностью исключая любые текстовые опечатки, пробелы или проблемы старой DLL
+            // ИСПРАВЛЕНО: Добавлен JOIN с expense_docs, строгий фильтр по датам периода 
+            // и поддержка как числовых ID категорий, так и текстовых названий!
             string sql = @"
                 SELECT ec.report_code, SUM(ei.amount) as total_amount
                 FROM expense_items ei
-                JOIN expense_categories ec ON CAST(ei.category AS INTEGER) = ec.id
+                JOIN expense_docs ed ON ei.doc_id = ed.id
+                JOIN expense_categories ec ON (
+                    (typeof(ei.category) = 'integer' AND ei.category = ec.id)
+                    OR (CAST(ei.category AS INTEGER) > 0 AND CAST(ei.category AS INTEGER) = ec.id)
+                    OR (TRIM(ei.category) = TRIM(ec.name))
+                )
+                WHERE date(ed.date) >= date(@start) AND date(ed.date) <= date(@end)
                 GROUP BY ec.report_code;";
 
             try
             {
-                // Создаем новый чистый словарь для подмены данных
                 var correctExpenses = new Dictionary<string, decimal>();
 
                 using (var conn = new SQLiteConnection(_connectionString))
@@ -51,6 +55,9 @@ namespace ChurchBudget_v3_WPF.Reports
                     conn.Open();
                     using (var cmd = new SQLiteCommand(sql, conn))
                     {
+                        cmd.Parameters.AddWithValue("@start", _startDate.ToString("yyyy-MM-dd"));
+                        cmd.Parameters.AddWithValue("@end", _endDate.ToString("yyyy-MM-dd"));
+
                         using (var reader = cmd.ExecuteReader())
                         {
                             while (reader.Read())
@@ -67,11 +74,13 @@ namespace ChurchBudget_v3_WPF.Reports
                     }
                 }
 
-                // Перезаписываем данные в модели на наши точные и честные результаты!
-                if (correctExpenses.Count > 0)
-                {
-                    _model.ExpenseByCode = correctExpenses;
-                }
+                // Подменяем словарь расходов на точный за выбранный период
+                _model.ExpenseByCode = correctExpenses;
+
+                // СРАЗУ ПЕРЕСЧИТЫВАЕМ КОНЕЧНЫЙ ОСТАТОК, чтобы баланс сошелся копейка в копейку!
+                decimal totalInc = 0; foreach (var v in _model.IncomeByCode.Values) totalInc += v;
+                decimal totalExp = 0; foreach (var v in _model.ExpenseByCode.Values) totalExp += v;
+                _model.ClosingBalance = _model.OpeningBalance + totalInc - totalExp;
             }
             catch (Exception ex)
             {

@@ -33,6 +33,29 @@ namespace ChurchBudget_v3_WPF
 
             // Подписываемся на событие закрытия окна для автоматического бэкапа
             this.Closing += MainWindow_Closing;
+
+            // 1. Сначала пробуем прочитать актуальную версию из файла version.txt в папке программы
+            string versionStr = "";
+            string verFilePath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "version.txt");
+
+            if (System.IO.File.Exists(verFilePath))
+            {
+                versionStr = System.IO.File.ReadAllText(verFilePath).Trim();
+            }
+
+            // 2. Если файла нет или он пустой — берем из свойств сборки AssemblyInfo.cs
+            if (string.IsNullOrEmpty(versionStr))
+            {
+                var ver = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
+                versionStr = $"{ver.Major}.{ver.Minor}.{ver.Build}";
+            }
+
+            string fullTitle = $"-=== Учет бюджета церкви v.{versionStr} ===-";
+            this.Title = fullTitle;
+            if (txtWindowTitle != null)
+            {
+                txtWindowTitle.Text = fullTitle;
+            }
         }
 
         // Этот метод сработает автоматически, когда окно полностью появится на экране

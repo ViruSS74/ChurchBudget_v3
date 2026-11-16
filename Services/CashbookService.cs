@@ -39,21 +39,20 @@ public class CashbookService
         using (var conn = new SQLiteConnection(_connectionString))
         {
             conn.Open();
-
             string startDate = $"{year}-01-01";
             string endDate = $"{year}-12-31";
 
+            // ИСПРАВЛЕНО: Используем функцию date() для точного сравнения без учета времени
             string sql = @"
-            SELECT co.id, co.date, co.order_type, co.amount
-            FROM cash_orders co
-            WHERE co.date BETWEEN @startDate AND @endDate
-            ORDER BY co.date, co.id";
+        SELECT co.id, co.date, co.order_type, co.amount
+        FROM cash_orders co
+        WHERE date(co.date) BETWEEN date(@startDate) AND date(@endDate)
+        ORDER BY co.date, co.id";
 
             using (var cmd = new SQLiteCommand(sql, conn))
             {
                 cmd.Parameters.Add("@startDate", System.Data.DbType.String).Value = startDate;
                 cmd.Parameters.Add("@endDate", System.Data.DbType.String).Value = endDate;
-
                 using (var adapter = new SQLiteDataAdapter(cmd))
                 {
                     DataTable dt = new DataTable();
@@ -98,7 +97,6 @@ public class CashbookService
         }
     }
 
-    // Получить операции за конкретный день
     // Получить операции за конкретный день
     public DataTable GetOperationsForDay(int year, int month, int day)
     {
@@ -165,8 +163,7 @@ public class CashbookService
         }
     }
 
-    // Расчет остатка на конец дня
-    // Абсолютно надежный расчет остатка на конец дня
+    // Расчет остатка на конец дня. Абсолютно надежный расчет остатка на конец дня
     public decimal CalculateClosingBalance(int year, int month, int day)
     {
         // 1. Получаем стартовый баланс года (метод уже защищен от пустых значений)
@@ -181,14 +178,14 @@ public class CashbookService
 
             // 3. Используем прямое сравнение строк БЕЗ функций date(), чтобы исключить NULL
             string sqlPko = @"SELECT COALESCE(SUM(amount), 0) 
-            FROM cash_orders 
-            WHERE order_type = 'ПКО' 
-            AND date <= @endDate";
+                  FROM cash_orders 
+                  WHERE order_type = 'ПКО' 
+                  AND date(date) <= date(@endDate)";
 
             string sqlRko = @"SELECT COALESCE(SUM(amount), 0) 
-            FROM cash_orders 
-            WHERE order_type = 'РКО' 
-            AND date <= @endDate";
+                  FROM cash_orders 
+                  WHERE order_type = 'РКО' 
+                  AND date(date) <= date(@endDate)";
 
             using (var cmdPko = new SQLiteCommand(sqlPko, conn))
             using (var cmdRko = new SQLiteCommand(sqlRko, conn))

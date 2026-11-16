@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ChurchBudget_v3_WPF"
         mc:Ignorable="d"
-        Title="-=== Учет бюджета церкви v.3.1.125 ===-" Height="660" Width="1150"
+        Title="-=== Учет бюджета церкви v.3.1.130 ===-" Height="660" Width="1150"
         MinHeight="550" MinWidth="950"
         WindowStartupLocation="CenterScreen"
         WindowStyle="None" 
@@ -14,56 +14,32 @@
         Icon="/main_icon.ico"
         UseLayoutRounding="True"
         SnapsToDevicePixels="True">
-
     <Border BorderBrush="{StaticResource ChurchWindowBorderColor}" BorderThickness="1">
         <DockPanel>
-
             <!-- 1. КАСТОМНАЯ ВЕРХНЯЯ ПАНЕЛЬ (Заголовок окна) -->
             <Border DockPanel.Dock="Top" Background="{StaticResource ChurchHeaderColor}" Padding="8" MouseDown="TitleBar_MouseDown">
                 <Grid>
                     <!-- Левая часть: Иконка и Название программы -->
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Left">
                         <Image Source="main_icon.ico" Width="20" Height="20" Margin="0,0,10,0" RenderOptions.BitmapScalingMode="HighQuality"/>
-                        <TextBlock Text="-=== Учет бюджета церкви v.3.1.125 ===-" Foreground="#013270" FontSize="16" FontWeight="Bold" VerticalAlignment="Center"/>
+                        <TextBlock Name="txtWindowTitle" Text="-=== Учет бюджета церкви ===-" FontSize="16" FontWeight="Bold"/>
                     </StackPanel>
 
                     <!-- Правая часть: Кнопки Свернуть и Закрыть -->
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Stretch">
                         <!-- Кнопка Свернуть -->
-                        <Button Content="-" FontFamily="Marlett" FontSize="12" Foreground="#013270" Background="Transparent" BorderThickness="0" Width="45" Click="MinimizeButton_Click" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}"/>
+                        <Button Content="-" FontFamily="Marlett" FontSize="12" Foreground="{StaticResource ChurchTextColor}" 
+                                Background="Transparent" BorderThickness="0" Width="45" Click="MinimizeButton_Click" 
+                                Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}"/>
 
-                        <!-- Кнопка Закрыть -->
-                        <Button Content="X" FontFamily="Marlett" FontSize="12" Foreground="#013270" Width="45" Click="CloseButton_Click">
-                            <Button.Style>
-                                <Style TargetType="Button">
-                                    <Setter Property="Background" Value="Transparent"/>
-                                    <Setter Property="BorderThickness" Value="0"/>
-                                    <Setter Property="Template">
-                                        <Setter.Value>
-                                            <ControlTemplate TargetType="Button">
-                                                <Border Background="{TemplateBinding Background}" BorderThickness="0">
-                                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                                </Border>
-                                            </ControlTemplate>
-                                        </Setter.Value>
-                                    </Setter>
-                                    <Style.Triggers>
-                                        <Trigger Property="IsMouseOver" Value="True">
-                                            <Trigger.Setters>
-                                                <Setter Property="Background" Value="#E81123"/>
-                                                <Setter Property="Foreground" Value="White"/>
-                                            </Trigger.Setters>
-                                        </Trigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </Button.Style>
-                        </Button>
+                        <!-- Кнопка Закрыть: теперь в одну чистую строку через общий словарь стилей! -->
+                        <Button Content="X" Style="{StaticResource WindowCloseButtonStyle}" Click="CloseButton_Click"/>
                     </StackPanel>
                 </Grid>
             </Border>
 
             <!-- 2. КЛАССИЧЕСКОЕ ВЕРХНЕЕ ГОРИЗОНТАЛЬНОЕ МЕНЮ -->
-            <Menu DockPanel.Dock="Top" Background="#8FA882" Foreground="#013270" FontWeight="Bold" Padding="4" FontSize="16">
+            <Menu DockPanel.Dock="Top" Background="{StaticResource ChurchHeaderColor}" Foreground="{StaticResource ChurchTextColor}" FontWeight="Bold" Padding="4" FontSize="16">
                 <!-- ФАЙЛ -->
                 <MenuItem Header="Файл">
                     <MenuItem Header="Выход" Click="ExitToolStripMenuItem_Click">
@@ -192,7 +168,7 @@
             </Menu>
 
             <!-- НИЖНИЙ СТАТУС-БАР -->
-            <StatusBar DockPanel.Dock="Bottom" Background="#8FA882" Foreground="#2F3E2B">
+            <StatusBar DockPanel.Dock="Bottom" Background="{StaticResource ChurchHeaderColor}" Foreground="#2F3E2B">
                 <StatusBarItem>
                     <TextBlock Name="tblDBStatus" Text="БД: Проверка подключения..." FontWeight="Bold"/>
                 </StatusBarItem>
@@ -210,7 +186,7 @@
 
                         <!-- 1. Название организации -->
                         <Border Grid.Row="0" 
-                                Background="#013270" 
+                                Background="{StaticResource ChurchTextColor}" 
                                 CornerRadius="4" 
                                 Margin="0,20,0,10" 
                                 Padding="12" 
@@ -218,11 +194,9 @@
                             <TextBlock Name="tblOrgName" 
                                        Text="Загрузка названия..." 
                                        FontSize="24"
-                                       FontFamily="Georgia"
                                        FontWeight="Bold"
                                        Foreground="White" 
-                                       TextAlignment="Center"
-                                       Visibility="Visible"/>
+                                       TextAlignment="Center"/>
                         </Border>
 
                         <!-- 2. Центральное изображение -->

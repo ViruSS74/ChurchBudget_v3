@@ -258,6 +258,9 @@
     <Content Include="Support\Прочти меня.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Resource Include="version.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Graph\Icons\about.png" />
     <Resource Include="Graph\Icons\accept.png" />
     <Resource Include="Graph\Icons\add.png" />

@@ -80,7 +80,7 @@ namespace ChurchBudget_v3_WPF.Views
                 };
 
                 // 1. Инициализируем наш отчет, передавая модель и строку подключения
-                FinancialBudgetReport document = new FinancialBudgetReport(model, _connString);
+                FinancialBudgetReport document = new FinancialBudgetReport(model, _connString, startPeriod, endPeriod);
 
                 // 2. Вычисляем четкий путь к файлу в корневой папке приложения
                 string filePath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, $"FinancialReport_Year_{year}.pdf");
@@ -137,7 +137,7 @@ namespace ChurchBudget_v3_WPF.Views
                 };
 
                 // 1. Инициализируем наш отчет, передавая модель и строку подключения
-                FinancialBudgetReport document = new FinancialBudgetReport(model, _connString);
+                FinancialBudgetReport document = new FinancialBudgetReport(model, _connString, startPeriod, endPeriod);
 
                 // 2. Вычисляем четкий путь к файлу
                 string filePath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, $"FinancialReport_Month_{month}_{year}.pdf");

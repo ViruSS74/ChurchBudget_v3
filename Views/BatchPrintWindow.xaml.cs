@@ -187,11 +187,10 @@ namespace ChurchBudget_v3_WPF.Views
                     {
                         string orderFilter = selectedDocType.Contains("ПКО") ? "ПКО" : "РКО";
                         List<CashOrderInDataModel> orderList = new List<CashOrderInDataModel>();
-
                         using (var conn = new SQLiteConnection(_connString))
                         {
                             conn.Open();
-                            string sql = @"SELECT * FROM cash_orders WHERE order_type = @type AND STRFTIME ('%Y', date) = @year AND STRFTIME ('%m', date) = @month ORDER BY date (date) ASC, order_number ASC";
+                            string sql = @"SELECT * FROM cash_orders WHERE order_type = @type AND STRFTIME('%Y', date) = @year AND STRFTIME('%m', date) = @month ORDER BY date(date) ASC, order_number ASC";
                             using (var cmd = new SQLiteCommand(sql, conn))
                             {
                                 cmd.Parameters.AddWithValue("@type", orderFilter);
@@ -202,29 +201,55 @@ namespace ChurchBudget_v3_WPF.Views
                                     while (reader.Read())
                                     {
                                         DateTime docDate = Convert.ToDateTime(reader["date"]);
-                                        string person = reader["person_name_manual"] != DBNull.Value ? reader["person_name_manual"].ToString() : "";
-                                        string passport = null;
-                                        if (orderFilter == "РКО")
+                                        string person = reader["person_name_manual"] != DBNull.Value ? reader["person_name_manual"].ToString().Trim() : "";
+                                        int? personId = reader["person_id"] != DBNull.Value ? (int?)Convert.ToInt32(reader["person_id"]) : null;
+                                        string passport = "";
+
+                                        // Ищем паспорт строго для указанного получателя (по ID или по ФИО)
+                                        if (orderFilter == "РКО" && ((personId.HasValue && personId.Value > 0) || !string.IsNullOrEmpty(person)))
                                         {
-                                            passport = "Паспорт не указан в БД";
-                                            string sqlPass = @"SELECT td.name as doc_type, series, number, issued_by, issue_date FROM id_documents idd LEFT JOIN type_id_document td ON idd.type_id_doc = td.id WHERE employee_id = 2 LIMIT 1";
+                                            string sqlPass = @"
+                                                SELECT td.name as doc_type, idd.series, idd.number, idd.issued_by, idd.issue_date 
+                                                FROM personal p
+                                                JOIN id_documents idd ON p.id = idd.employee_id
+                                                LEFT JOIN type_id_document td ON idd.type_id_doc = td.id 
+                                                WHERE (p.id = @pId) 
+                                                   OR (@pName != '' AND TRIM(p.last_name || ' ' || p.first_name || ' ' || p.middle_name) LIKE @pName || '%')
+                                                LIMIT 1;";
+
                                             using (var cmdP = new SQLiteCommand(sqlPass, conn))
-                                            using (var rdrP = cmdP.ExecuteReader())
                                             {
-                                                if (rdrP.Read())
+                                                cmdP.Parameters.AddWithValue("@pId", personId.HasValue ? personId.Value : -1);
+                                                cmdP.Parameters.AddWithValue("@pName", person);
+                                                using (var rdrP = cmdP.ExecuteReader())
                                                 {
-                                                    string pDate = rdrP["issue_date"] != DBNull.Value ? Convert.ToDateTime(rdrP["issue_date"]).ToString("dd.MM.yyyy") : "";
-                                                    passport = $"{rdrP["doc_type"]} {rdrP["series"]} {rdrP["number"]}, выдан {rdrP["issued_by"]} {pDate} г.";
+                                                    if (rdrP.Read())
+                                                    {
+                                                        string pDate = "";
+                                                        if (rdrP["issue_date"] != DBNull.Value && DateTime.TryParse(rdrP["issue_date"].ToString(), out DateTime dt))
+                                                        {
+                                                            pDate = dt.ToString("dd.MM.yyyy") + " г.";
+                                                        }
+                                                        else if (rdrP["issue_date"] != DBNull.Value)
+                                                        {
+                                                            pDate = rdrP["issue_date"].ToString();
+                                                        }
+
+                                                        string docType = rdrP["doc_type"] != DBNull.Value ? rdrP["doc_type"].ToString() : "Паспорт";
+                                                        passport = $"{docType} {rdrP["series"]} {rdrP["number"]}, выдан {rdrP["issued_by"]} {pDate}".Trim();
+                                                    }
                                                 }
                                             }
                                         }
+
                                         orderList.Add(new CashOrderInDataModel
                                         {
                                             OrganizationName = dbOrgName,
                                             OrderNumber = reader["order_number"].ToString().Replace("ПКО-", "").Replace("РКО-", ""),
                                             OrderDate = docDate,
                                             Amount = Convert.ToDecimal(reader["amount"]),
-                                            FromPersonGenitive = string.IsNullOrEmpty(person) ? currentTreasurer : person,
+                                            // Для ПКО при пустом поле ставим казначея, для РКО оставляем пустым, если получатель не указан
+                                            FromPersonGenitive = (orderFilter == "ПКО" && string.IsNullOrEmpty(person)) ? currentTreasurer : person,
                                             Basis = reader["base"] != DBNull.Value ? reader["base"].ToString() : "Хозяйственные нужды",
                                             Appendix = reader["appendix"] != DBNull.Value ? reader["appendix"].ToString() : "—",
                                             RectorName = rector,
@@ -237,14 +262,14 @@ namespace ChurchBudget_v3_WPF.Views
                         }
                         if (orderList.Count == 0)
                         {
-                            MessageBox.Show($"Кассовые документы {orderFilter} за выбранный период не найдены.", "Информация", MessageBoxButton.OK, MessageBoxImage.Information); return;
+                            MessageBox.Show($"Кассовые документы {orderFilter} за выбранный период не найдены.", "Информация", MessageBoxButton.OK, MessageBoxImage.Information);
+                            return;
                         }
                         var doc = new CashOrdersPacketReport(orderList);
                         doc.GeneratePdf(sfd.FileName);
                     }
 
                     // Открываем созданный общий PDF-пакет за месяц
-
                     System.Diagnostics.Process.Start(sfd.FileName);
                 }
                 catch (Exception ex)
