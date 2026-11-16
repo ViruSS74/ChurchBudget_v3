@@ -14,7 +14,6 @@
         Icon="/main_icon.ico"
         UseLayoutRounding="True"
         SnapsToDevicePixels="True">
-    
     <Border Background="{StaticResource ChurchBgColor}" BorderBrush="{StaticResource ChurchWindowBorderColor}" BorderThickness="1">
         <DockPanel>
             <!-- 1. ШАПКА ОКНА -->
@@ -22,72 +21,44 @@
                 <Grid>
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Left">
                         <Image Source="/main_icon.ico" Width="20" Height="20" Margin="0,0,10,0" RenderOptions.BitmapScalingMode="HighQuality"/>
-                        <TextBlock Text="Редактирование и просмотр документа" FontSize="14" FontWeight="Bold" VerticalAlignment="Center"/>
+                        <TextBlock Text="Редактирование и просмотр документа" Style="{StaticResource ChurchHeaderTitleStyle}"/>
                     </StackPanel>
-                    <Button Width="45" HorizontalAlignment="Right" Click="CloseButton_Click">
-                        <Button.Style>
-                            <Style TargetType="Button">
-                                <Setter Property="Background" Value="Transparent"/>
-                                <Setter Property="Foreground" Value="#013270"/>
-                                <Setter Property="FontFamily" Value="Marlett"/>
-                                <Setter Property="FontSize" Value="12"/>
-                                <Setter Property="Template">
-                                    <Setter.Value>
-                                        <ControlTemplate TargetType="Button">
-                                            <Border x:Name="border" Background="{TemplateBinding Background}">
-                                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                            </Border>
-                                            <ControlTemplate.Triggers>
-                                                <Trigger Property="IsMouseOver" Value="True">
-                                                    <Setter TargetName="border" Property="Background" Value="#E81123"/>
-                                                    <Setter Property="Foreground" Value="White"/>
-                                                </Trigger>
-                                            </ControlTemplate.Triggers>
-                                        </ControlTemplate>
-                                    </Setter.Value>
-                                </Setter>
-                            </Style>
-                        </Button.Style>
-                        X
-                    </Button>
+                    <Button Content="X" Style="{StaticResource WindowCloseButtonStyle}" HorizontalAlignment="Right" Click="CloseButton_Click"/>
                 </Grid>
             </Border>
-
             <!-- 2. НИЖНЯЯ ПАНЕЛЬ С КНОПКАМИ УПРАВЛЕНИЯ -->
             <Border DockPanel.Dock="Bottom" Background="{StaticResource ChurchFooterColor}" Padding="12" BorderBrush="#DCDCDC" BorderThickness="0,1,0,0">
                 <Grid>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
                         <Button Width="210" Height="32" Margin="0,0,10,0" Click="btnSave_Click">
-                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                                 <Image Source="/Graph/Icons/save.png" Width="16" Height="16" Margin="0,0,8,0" RenderOptions.BitmapScalingMode="HighQuality"/>
-                                <TextBlock Text="Сохранить изменения" VerticalAlignment="Center"/>
+                                <TextBlock Text="Сохранить изменения"/>
                             </StackPanel>
                         </Button>
                         <Button Width="150" Height="32" Margin="0,0,10,0" Click="btnPrint_Click">
-                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                                 <Image Source="/Graph/Icons/print.png" Width="16" Height="16" Margin="0,0,8,0" RenderOptions.BitmapScalingMode="HighQuality"/>
-                                <TextBlock Text="Печать бланка" VerticalAlignment="Center"/>
+                                <TextBlock Text="Печать бланка"/>
                             </StackPanel>
                         </Button>
                     </StackPanel>
-                    <TextBlock Name="lblTotal" Text="Итого: 0.00 руб." HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="15" FontWeight="Bold" Foreground="#013270"/>
+                    <TextBlock Name="lblTotal" Text="Итого: 0.00 руб." HorizontalAlignment="Center" FontSize="15" FontWeight="Bold"/>
                     <Button Width="120" Height="32" HorizontalAlignment="Right" Click="CloseButton_Click">
-                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                             <Image Source="/Graph/Icons/exit.png" Width="16" Height="16" Margin="0,0,8,0" RenderOptions.BitmapScalingMode="HighQuality"/>
-                            <TextBlock Text="Закрыть" VerticalAlignment="Center"/>
+                            <TextBlock Text="Закрыть"/>
                         </StackPanel>
                     </Button>
                 </Grid>
             </Border>
-
-            <!-- 3. ЦЕНТРАЛЬНАЯ РАБОЧАЯ ОБЛАСТЬ (Разделение 50 на 50) -->
+            <!-- 3. ЦЕНТРАЛЬНАЯ РАБОЧАЯ ОБЛАСТЬ -->
             <Grid Margin="15">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="1*" />
                     <ColumnDefinition Width="1.2*" />
                 </Grid.ColumnDefinitions>
-
-                <!-- Левая колонка: Форма ордера защищена скроллером -->
+                <!-- Левая колонка -->
                 <ScrollViewer Grid.Column="0" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Margin="0,0,10,0">
                     <GroupBox Header=" Данные для кассового ордера (ПКО / РКО) " Padding="10" FontSize="13" FontWeight="Bold">
                         <Grid>
@@ -100,30 +71,19 @@
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="Auto"/>
                             </Grid.RowDefinitions>
-
-                            <TextBlock Text="ФИО (Принято/Выдано):" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Margin="0,5,10,5"/>
-                            <ComboBox Name="txtPerson" Grid.Row="0" Grid.Column="1" FontSize="14" Padding="3" Margin="0,5,0,5" IsEditable="True" VerticalContentAlignment="Center"/>
-
-                            <TextBlock Text="Основание операции:" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Margin="0,5,10,5"/>
-                            <TextBox Name="txtBasis" Grid.Row="1" Grid.Column="1" FontSize="14" Padding="5,3" Margin="0,5,0,5" VerticalContentAlignment="Center"/>
-
-                            <TextBlock Text="Приложение к ордеру:" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Margin="0,5,10,5"/>
-                            <TextBox Name="txtAppendix" Grid.Row="2" Grid.Column="1" FontSize="14" Padding="5,3" Margin="0,5,0,5" VerticalContentAlignment="Center"/>
+                            <TextBlock Text="ФИО (Принято/Выдано):" Grid.Row="0" Grid.Column="0" Margin="0,5,10,5"/>
+                            <ComboBox Name="txtPerson" Grid.Row="0" Grid.Column="1" Padding="3" Margin="0,5,0,5" IsEditable="True"/>
+                            <TextBlock Text="Основание операции:" Grid.Row="1" Grid.Column="0" Margin="0,5,10,5"/>
+                            <TextBox Name="txtBasis" Grid.Row="1" Grid.Column="1" Margin="0,5,0,5"/>
+                            <TextBlock Text="Приложение к ордеру:" Grid.Row="2" Grid.Column="0" Margin="0,5,10,5"/>
+                            <TextBox Name="txtAppendix" Grid.Row="2" Grid.Column="1" Margin="0,5,0,5"/>
                         </Grid>
                     </GroupBox>
                 </ScrollViewer>
-
-                <!-- Правая колонка: Просмотр содержимого -->
+                <!-- Правая колонка -->
                 <GroupBox Header=" Содержимое документа " Grid.Column="1" Padding="5" FontSize="13" FontWeight="Bold">
                     <Grid>
-                        <DataGrid Name="dgDocItems" CanUserAddRows="False" IsReadOnly="True" AutoGenerateColumns="False" Background="White" FontSize="14" FontWeight="Normal" Visibility="Visible">
-                            <DataGrid.ColumnHeaderStyle>
-                                <Style TargetType="DataGridColumnHeader">
-                                    <Setter Property="Background" Value="#F0F0F0"/>
-                                    <Setter Property="FontWeight" Value="Bold"/>
-                                    <Setter Property="Padding" Value="5"/>
-                                </Style>
-                            </DataGrid.ColumnHeaderStyle>
+                        <DataGrid Name="dgDocItems" CanUserAddRows="False" IsReadOnly="True" AutoGenerateColumns="False" FontSize="14" FontWeight="Normal" Visibility="Visible">
                             <DataGrid.Columns>
                                 <DataGridTextColumn Header="Наименование статьи / Категория" Binding="{Binding display_name}" Width="*"/>
                                 <DataGridTextColumn Header="Сумма, руб." Binding="{Binding amount, StringFormat=\{0:F2\}}" Width="120">
@@ -137,7 +97,6 @@
                                 </DataGridTextColumn>
                             </DataGrid.Columns>
                         </DataGrid>
-
                         <ScrollViewer Name="svOrderBlank" Visibility="Collapsed" Background="White" Padding="10" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
                             <StackPanel TextBlock.FontSize="14" TextBlock.FontWeight="Normal">
                                 <TextBlock Text="КАССОВЫЙ ОРДЕР" HorizontalAlignment="Center" FontWeight="Bold" FontSize="16" Margin="0,0,0,10"/>

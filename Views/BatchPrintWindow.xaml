@@ -14,78 +14,37 @@
         Icon="/main_icon.ico"
         UseLayoutRounding="True"
         SnapsToDevicePixels="True">
-
     <Border Background="{StaticResource ChurchBgColor}" BorderBrush="{StaticResource ChurchWindowBorderColor}" BorderThickness="1">
         <DockPanel>
-            <!-- 1. АДАПТИВНАЯ ШАПКА ОКНА -->
+            <!-- 1. ШАПКА ОКНА -->
             <Border DockPanel.Dock="Top" Background="{StaticResource ChurchHeaderColor}" Padding="8" MouseDown="TitleBar_MouseDown">
                 <Grid>
-                    <!-- Левая часть: Иконка приложения и Название формы -->
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Left">
-                        <Image Source="/main_icon.ico" 
-                               Width="20" 
-                               Height="20" 
-                               Margin="0,0,10,0" 
-                               RenderOptions.BitmapScalingMode="HighQuality"/>
-                        <TextBlock Text="Пакетная печать документов" FontSize="14" FontWeight="Bold" VerticalAlignment="Center"/>
+                        <Image Source="/main_icon.ico" Width="20" Height="20" Margin="0,0,10,0" RenderOptions.BitmapScalingMode="HighQuality"/>
+                        <TextBlock Text="Пакетная печать документов" Style="{StaticResource ChurchHeaderTitleStyle}"/>
                     </StackPanel>
-
-                    <!-- Кнопка закрытия формы (в верхнем правом углу) -->
-                    <Button Width="45" HorizontalAlignment="Right" Click="CloseButton_Click">
-                        <Button.Style>
-                            <Style TargetType="Button">
-                                <Setter Property="Background" Value="Transparent"/>
-                                <Setter Property="Foreground" Value="#013270"/>
-                                <Setter Property="FontFamily" Value="Marlett"/>
-                                <Setter Property="FontSize" Value="12"/>
-                                <Setter Property="Template">
-                                    <Setter.Value>
-                                        <ControlTemplate TargetType="Button">
-                                            <Border x:Name="border" Background="{TemplateBinding Background}">
-                                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                            </Border>
-                                            <ControlTemplate.Triggers>
-                                                <Trigger Property="IsMouseOver" Value="True">
-                                                    <Setter TargetName="border" Property="Background" Value="#E81123"/>
-                                                    <Setter Property="Foreground" Value="White"/>
-                                                </Trigger>
-                                            </ControlTemplate.Triggers>
-                                        </ControlTemplate>
-                                    </Setter.Value>
-                                </Setter>
-                            </Style>
-                        </Button.Style>
-                        X
-                    </Button>
+                    <Button Content="X" Style="{StaticResource WindowCloseButtonStyle}" HorizontalAlignment="Right" Click="CloseButton_Click"/>
                 </Grid>
             </Border>
-
-            <!-- 2. НИЖНЯЯ ПАНЕЛЬ С КНОПКАМИ -->
+            <!-- 2. НИЖНЯЯ ПАНЕЛЬ -->
             <Border DockPanel.Dock="Bottom" Background="{StaticResource ChurchFooterColor}" Padding="12" BorderBrush="#DCDCDC" BorderThickness="0,1,0,0">
                 <Grid>
-                    <!-- Кнопка формирования PDF файла -->
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-                        <Button Width="190" Height="32" HorizontalAlignment="Right" Click="PrintButton_Click">
-                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
-                                <Image Source="/Graph/Icons/pdfprint.png" Width="16" Height="16" Margin="0,0,8,0" RenderOptions.BitmapScalingMode="HighQuality"/>
-                                <TextBlock Text="Создать общий PDF" VerticalAlignment="Center"/>
-                            </StackPanel>
-                        </Button>
-                    </StackPanel>
-
-                    <!-- Кнопка закрытия формы справочника (справа) -->
+                    <Button Width="190" Height="32" HorizontalAlignment="Left" Click="PrintButton_Click">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                            <Image Source="/Graph/Icons/pdfprint.png" Width="16" Height="16" Margin="0,0,8,0" RenderOptions.BitmapScalingMode="HighQuality"/>
+                            <TextBlock Text="Создать общий PDF"/>
+                        </StackPanel>
+                    </Button>
                     <Button Width="120" Height="32" HorizontalAlignment="Right" Click="CloseButton_Click">
-                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                             <Image Source="/Graph/Icons/exit.png" Width="16" Height="16" Margin="0,0,8,0" RenderOptions.BitmapScalingMode="HighQuality"/>
-                            <TextBlock Text="Закрыть" VerticalAlignment="Center"/>
+                            <TextBlock Text="Закрыть"/>
                         </StackPanel>
                     </Button>
                 </Grid>
             </Border>
-
-            <!-- 3. СТРАХОВОЧНЫЙ СКРОЛЛЕР С ОГРАНИЧЕНИЕМ ШИРИНЫ -->
+            <!-- 3. ЦЕНТРАЛЬНАЯ РАБОЧАЯ ОБЛАСТЬ -->
             <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
-                <!-- ЦЕНТРАЛЬНАЯ РАБОЧАЯ ОБЛАСТЬ -->
                 <Grid Margin="15">
                     <GroupBox Header=" Функции печати: " Padding="15" FontSize="13" FontWeight="Bold">
                         <Grid VerticalAlignment="Top" Margin="5,10,5,5">
@@ -94,19 +53,15 @@
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="*"/>
                             </Grid.RowDefinitions>
-
-                            <!-- Выбор периода (Год и Месяц) -->
                             <StackPanel Orientation="Horizontal" Grid.Row="0" Margin="0,0,0,15">
-                                <TextBlock Text="Год:" VerticalAlignment="Center" Margin="0,0,10,0" FontWeight="Bold"/>
-                                <ComboBox x:Name="cmbYear" Width="90" Height="28" Margin="0,0,20,0" VerticalContentAlignment="Center"/>
-                                <TextBlock Text="Месяц:" VerticalAlignment="Center" Margin="0,0,10,0" FontWeight="Bold"/>
-                                <ComboBox x:Name="cmbMonth" Width="150" Height="28" VerticalContentAlignment="Center"/>
+                                <TextBlock Text="Год:" Margin="0,0,10,0" FontWeight="Bold"/>
+                                <ComboBox x:Name="cmbYear" Width="90" Margin="0,0,20,0"/>
+                                <TextBlock Text="Месяц:" Margin="0,0,10,0" FontWeight="Bold"/>
+                                <ComboBox x:Name="cmbMonth" Width="150"/>
                             </StackPanel>
-
-                            <!-- Выбор вида документа -->
                             <StackPanel Orientation="Horizontal" Grid.Row="1" Margin="0,0,0,5">
-                                <TextBlock Text="Вид документа:" VerticalAlignment="Center" Margin="0,0,10,0" FontWeight="Bold"/>
-                                <ComboBox x:Name="cmbDoc" Width="240" Height="28" Margin="0,0,20,0" VerticalContentAlignment="Center"/>
+                                <TextBlock Text="Вид документа:" Margin="0,0,10,0" FontWeight="Bold"/>
+                                <ComboBox x:Name="cmbDoc" Width="240" Margin="0,0,20,0"/>
                             </StackPanel>
                         </Grid>
                     </GroupBox>

@@ -12,6 +12,10 @@ namespace ChurchBudget_v3_WPF.Views
         public AboutWindow()
         {
             InitializeComponent();
+            var ver = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
+            if (txtAboutVersion != null)
+                txtAboutVersion.Text = $"Версия {ver.Major}.{ver.Minor}.{ver.Build} ({DateTime.Now.Year} год)";
+
         }
 
         // Клик по ссылке почты: автоматически открывает почту Windows
