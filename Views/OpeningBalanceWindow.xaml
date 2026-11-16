@@ -14,89 +14,51 @@
         Icon="/main_icon.ico"
         UseLayoutRounding="True"
         SnapsToDevicePixels="True">
-
     <Border Background="{StaticResource ChurchBgColor}" BorderBrush="{StaticResource ChurchWindowBorderColor}" BorderThickness="1">
         <DockPanel>
             <!-- 1. ШАПКА ОКНА -->
             <Border DockPanel.Dock="Top" Background="{StaticResource ChurchHeaderColor}" Padding="8" MouseDown="TitleBar_MouseDown">
                 <Grid>
-                    <!-- Левая часть: Иконка приложения и Название справочника -->
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Left">
-                        <Image Source="/main_icon.ico" 
-                        Width="20" 
-                        Height="20" 
-                        Margin="0,0,10,0" 
-                        RenderOptions.BitmapScalingMode="HighQuality"/>
-                        <TextBlock Text="Ввод начальных остатков" FontSize="14" FontWeight="Bold" VerticalAlignment="Center"/>
+                        <Image Source="/main_icon.ico" Width="20" Height="20" Margin="0,0,10,0" RenderOptions.BitmapScalingMode="HighQuality"/>
+                        <TextBlock Text="Ввод начальных остатков" Style="{StaticResource ChurchHeaderTitleStyle}"/>
                     </StackPanel>
-                    <!-- Кнопка закрытия формы справочника (справа) -->
-                    <Button Width="45" HorizontalAlignment="Right" Click="CloseButton_Click">
-                        <Button.Style>
-                            <Style TargetType="Button">
-                                <Setter Property="Background" Value="Transparent"/>
-                                <Setter Property="Foreground" Value="#013270"/>
-                                <Setter Property="FontFamily" Value="Marlett"/>
-                                <Setter Property="FontSize" Value="12"/>
-                                <Setter Property="Template">
-                                    <Setter.Value>
-                                        <ControlTemplate TargetType="Button">
-                                            <Border x:Name="border" Background="{TemplateBinding Background}">
-                                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                            </Border>
-                                            <ControlTemplate.Triggers>
-                                                <Trigger Property="IsMouseOver" Value="True">
-                                                    <Setter TargetName="border" Property="Background" Value="#E81123"/>
-                                                </Trigger>
-                                            </ControlTemplate.Triggers>
-                                        </ControlTemplate>
-                                    </Setter.Value>
-                                </Setter>
-                            </Style>
-                        </Button.Style>
-                        X
-                    </Button>
+                    <Button Content="X" Style="{StaticResource WindowCloseButtonStyle}" HorizontalAlignment="Right" Click="CloseButton_Click"/>
                 </Grid>
             </Border>
-
-            <!-- 2. НИЖНЯЯ ПАНЕЛЬ С КНОПКАМИ УПРАВЛЕНИЯ -->
+            <!-- 2. НИЖНЯЯ ПАНЕЛЬ -->
             <Border DockPanel.Dock="Bottom" Background="{StaticResource ChurchFooterColor}" Padding="12" BorderBrush="#DCDCDC" BorderThickness="0,1,0,0">
                 <Grid>
-                    <!-- Кнопки действий (слева) -->
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-                        <!-- Кнопка Сохранить -->
                         <Button Width="120" Height="32" Margin="0,0,10,0" Click="SaveButton_Click">
-                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                                 <Image Source="/Graph/Icons/save.png" Width="16" Height="16" Margin="0,0,8,0" RenderOptions.BitmapScalingMode="HighQuality"/>
-                                <TextBlock Text="Сохранить" VerticalAlignment="Center"/>
+                                <TextBlock Text="Сохранить"/>
                             </StackPanel>
                         </Button>
-                        <!-- Кнопка Отмена -->
                         <Button Width="120" Height="32" Margin="0,0,10,0" Click="CancelButton_Click">
-                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                                 <Image Source="/Graph/Icons/cancel.png" Width="16" Height="16" Margin="0,0,8,0" RenderOptions.BitmapScalingMode="HighQuality"/>
-                                <TextBlock Text="Отмена" VerticalAlignment="Center"/>
+                                <TextBlock Text="Отмена"/>
                             </StackPanel>
                         </Button>
                     </StackPanel>
-                    <!-- Кнопка закрытия формы справочника (справа) -->
                     <Button Width="120" Height="32" HorizontalAlignment="Right" Click="CloseButton_Click">
-                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                             <Image Source="/Graph/Icons/exit.png" Width="16" Height="16" Margin="0,0,8,0" RenderOptions.BitmapScalingMode="HighQuality"/>
-                            <TextBlock Text="Закрыть" VerticalAlignment="Center"/>
+                            <TextBlock Text="Закрыть"/>
                         </StackPanel>
                     </Button>
                 </Grid>
             </Border>
-
-            <!-- 3. ЦЕНТРАЛЬНАЯ РАБОЧАЯ ОБЛАСТЬ (Шапка + Таблица) -->
+            <!-- 3. ЦЕНТРАЛЬНАЯ РАБОЧАЯ ОБЛАСТЬ -->
             <Grid Margin="15,10,15,10">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="15"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
-
-                <!-- ================= ВЕРХНЯЯ ПАНЕЛЬ (Строка 0) ================= -->
+                <!-- Верхняя панель ввода -->
                 <Grid Grid.Row="0" VerticalAlignment="Center">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
@@ -105,57 +67,32 @@
                         <ColumnDefinition Width="25"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
-
-                    <!-- Блок: Дата ввода остатка -->
                     <StackPanel Grid.Column="0" Orientation="Horizontal">
-                        <TextBlock Text="Дата ввода остатка:" FontSize="14" FontWeight="Bold" VerticalAlignment="Center" Margin="0,0,10,0"/>
-                        <DatePicker Name="dpBalanceDate" Width="180" Height="28" FontSize="14" VerticalContentAlignment="Center"/>
+                        <TextBlock Text="Дата ввода остатка:" FontSize="14" FontWeight="Bold" Margin="0,0,10,0"/>
+                        <DatePicker Name="dpBalanceDate" Width="180"/>
                     </StackPanel>
-
-                    <!-- Блок: Сумма ввода остатка -->
                     <StackPanel Grid.Column="2" Orientation="Horizontal">
-                        <TextBlock Text="Сумма ввода остатка:" FontSize="14" FontWeight="Bold" VerticalAlignment="Center" Margin="0,0,10,0"/>
-                        <TextBox Name="txtBalanceSumm" Width="150" Height="28" FontSize="14" FontWeight="SemiBold" VerticalContentAlignment="Center" Padding="5,0"/>
+                        <TextBlock Text="Сумма ввода остатка:" FontSize="14" FontWeight="Bold" Margin="0,0,10,0"/>
+                        <TextBox Name="txtBalanceSumm" Width="150" FontWeight="SemiBold"/>
                     </StackPanel>
-
-                    <!-- Блок: Комментарий -->
                     <Grid Grid.Column="4">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        <TextBlock Grid.Column="0" Text="Комментарий:" FontSize="14" FontWeight="Bold" VerticalAlignment="Center" Margin="0,0,10,0"/>
-                        <TextBox Grid.Column="1" Name="txtComment" Height="28" FontSize="14" FontWeight="SemiBold" VerticalContentAlignment="Center" Padding="5,0"/>
+                        <TextBlock Grid.Column="0" Text="Комментарий:" FontSize="14" FontWeight="Bold" Margin="0,0,10,0"/>
+                        <TextBox Grid.Column="1" Name="txtComment" FontWeight="SemiBold"/>
                     </Grid>
                 </Grid>
-
-                <!-- ================= ТАБЛИЧНАЯ ЧАСТЬ (Строка 2) ================= -->
+                <!-- Таблица остатков -->
                 <DataGrid Name="dgOpeningBalance"
-                    Grid.Row="2"
-                    AutoGenerateColumns="False" 
-                    CanUserAddRows="False" 
-                    IsReadOnly="True" 
-                    SelectionMode="Single" 
-                    Background="{StaticResource ChurchGridBg}"
-                    RowBackground="{StaticResource ChurchGridRowAlternating}"
-                    AlternatingRowBackground="{StaticResource ChurchGridRowNormal}"
-                    GridLinesVisibility="Horizontal" 
-                    HorizontalGridLinesBrush="{StaticResource ChurchWindowBorderColor}" 
-                    FontSize="14" 
-                    HeadersVisibility="Column">
-
-                    <!-- Стилизация шапки таблицы -->
-                    <DataGrid.ColumnHeaderStyle>
-                        <Style TargetType="DataGridColumnHeader">
-                            <Setter Property="Background" Value="#F0F0F0"/>
-                            <Setter Property="Foreground" Value="#333333"/>
-                            <Setter Property="FontWeight" Value="Bold"/>
-                            <Setter Property="Padding" Value="8,6,8,6"/>
-                            <Setter Property="BorderBrush" Value="#DCDCDC"/>
-                            <Setter Property="BorderThickness" Value="0,0,1,1"/>
-                        </Style>
-                    </DataGrid.ColumnHeaderStyle>
-
+                          Grid.Row="2"
+                          AutoGenerateColumns="False" 
+                          CanUserAddRows="False" 
+                          IsReadOnly="True" 
+                          SelectionMode="Single" 
+                          FontSize="14" 
+                          HeadersVisibility="Column">
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="Дата" Binding="{Binding balance_date, StringFormat=\{0:dd.MM.yyyy\}}" IsReadOnly="True" Width="150">
                             <DataGridTextColumn.ElementStyle>
@@ -165,7 +102,6 @@
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
-
                         <DataGridTextColumn Header="Сумма" Binding="{Binding amount, StringFormat=\{0:N2\}}" IsReadOnly="True" Width="150">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
@@ -175,7 +111,6 @@
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
-
                         <DataGridTextColumn Header="Комментарий" Binding="{Binding comment}" IsReadOnly="True" Width="*">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
@@ -190,3 +125,4 @@
         </DockPanel>
     </Border>
 </Window>
+    

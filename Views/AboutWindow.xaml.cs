@@ -12,9 +12,27 @@ namespace ChurchBudget_v3_WPF.Views
         public AboutWindow()
         {
             InitializeComponent();
-            var ver = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
+            // 1. Сначала пробуем прочитать актуальную версию из файла version.txt в папке программы
+            string versionStr = "";
+            string verFilePath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "version.txt");
+
+            if (System.IO.File.Exists(verFilePath))
+            {
+                versionStr = System.IO.File.ReadAllText(verFilePath).Trim();
+            }
+
+            // 2. Если файла нет — берем из свойств сборки AssemblyInfo.cs
+            if (string.IsNullOrEmpty(versionStr))
+            {
+                var ver = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
+                versionStr = $"{ver.Major}.{ver.Minor}.{ver.Build}";
+            }
+
             if (txtAboutVersion != null)
-                txtAboutVersion.Text = $"Версия {ver.Major}.{ver.Minor}.{ver.Build} ({DateTime.Now.Year} год)";
+            {
+                txtAboutVersion.Text = $"Версия {versionStr} ({DateTime.Now.Year} год)";
+            }
+
 
         }
 
