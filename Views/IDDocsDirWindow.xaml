@@ -16,99 +16,57 @@
         SnapsToDevicePixels="True">
     <Border Background="{StaticResource ChurchBgColor}" BorderBrush="{StaticResource ChurchWindowBorderColor}" BorderThickness="1">
         <DockPanel>
-            <!-- 1. АДАПТИВНАЯ ШАПКА ОКНА -->
+            <!-- 1. ШАПКА ОКНА -->
             <Border DockPanel.Dock="Top" Background="{StaticResource ChurchHeaderColor}" Padding="8" MouseDown="TitleBar_MouseDown">
                 <Grid>
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Left">
                         <Image Source="/main_icon.ico" Width="20" Height="20" Margin="0,0,10,0" RenderOptions.BitmapScalingMode="HighQuality"/>
-                        <TextBlock Text="Справочник: ИД документы сотрудников" FontSize="14" FontWeight="Bold" VerticalAlignment="Center"/>
+                        <TextBlock Text="Справочник: ИД документы сотрудников" Style="{StaticResource ChurchHeaderTitleStyle}"/>
                     </StackPanel>
-                    <Button Width="45" HorizontalAlignment="Right" Click="CloseButton_Click">
-                        <Button.Style>
-                            <Style TargetType="Button">
-                                <Setter Property="Background" Value="Transparent"/>
-                                <Setter Property="Foreground" Value="#013270"/>
-                                <Setter Property="FontFamily" Value="Marlett"/>
-                                <Setter Property="FontSize" Value="12"/>
-                                <Setter Property="Template">
-                                    <Setter.Value>
-                                        <ControlTemplate TargetType="Button">
-                                            <Border x:Name="border" Background="{TemplateBinding Background}">
-                                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                            </Border>
-                                            <ControlTemplate.Triggers>
-                                                <Trigger Property="IsMouseOver" Value="True">
-                                                    <Setter TargetName="border" Property="Background" Value="#E81123"/>
-                                                    <Setter Property="Foreground" Value="White"/>
-                                                </Trigger>
-                                            </ControlTemplate.Triggers>
-                                        </ControlTemplate>
-                                    </Setter.Value>
-                                </Setter>
-                            </Style>
-                        </Button.Style>
-                        X
-                    </Button>
+                    <Button Content="X" Style="{StaticResource WindowCloseButtonStyle}" HorizontalAlignment="Right" Click="CloseButton_Click"/>
                 </Grid>
             </Border>
-
-            <!-- 2. НИЖНЯЯ ПАНЕЛЬ С КНОПКАМИ УПРАВЛЕНИЯ -->
+            <!-- 2. НИЖНЯЯ ПАНЕЛЬ -->
             <Border DockPanel.Dock="Bottom" Background="{StaticResource ChurchFooterColor}" Padding="12" BorderBrush="#DCDCDC" BorderThickness="0,1,0,0">
                 <Grid>
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center">
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
                         <Button Width="120" Height="32" Margin="0,0,10,0" Click="AddButton_Click">
-                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                                 <Image Source="/Graph/Icons/add.png" Width="16" Height="16" Margin="0,0,8,0" RenderOptions.BitmapScalingMode="HighQuality"/>
-                                <TextBlock Text="Добавить" VerticalAlignment="Center"/>
+                                <TextBlock Text="Добавить"/>
                             </StackPanel>
                         </Button>
                         <Button Width="120" Height="32" Margin="0,0,10,0" Click="EditButton_Click">
-                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                                 <Image Source="/Graph/Icons/edit.png" Width="16" Height="16" Margin="0,0,8,0" RenderOptions.BitmapScalingMode="HighQuality"/>
-                                <TextBlock Text="Изменить" VerticalAlignment="Center"/>
+                                <TextBlock Text="Изменить"/>
                             </StackPanel>
                         </Button>
                         <Button Width="120" Height="32" Click="DeleteButton_Click">
-                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                                 <Image Source="/Graph/Icons/delete.png" Width="16" Height="16" Margin="0,0,8,0" RenderOptions.BitmapScalingMode="HighQuality"/>
-                                <TextBlock Text="Удалить" VerticalAlignment="Center"/>
+                                <TextBlock Text="Удалить"/>
                             </StackPanel>
                         </Button>
                     </StackPanel>
-                    <Button Width="120" Height="32" HorizontalAlignment="Right" Click="CloseButton_Click" VerticalAlignment="Center">
-                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
+                    <Button Width="120" Height="32" HorizontalAlignment="Right" Click="CloseButton_Click">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                             <Image Source="/Graph/Icons/exit.png" Width="16" Height="16" Margin="0,0,8,0" RenderOptions.BitmapScalingMode="HighQuality"/>
-                            <TextBlock Text="Закрыть" VerticalAlignment="Center"/>
+                            <TextBlock Text="Закрыть"/>
                         </StackPanel>
                     </Button>
                 </Grid>
             </Border>
-
-            <!-- 3. ЦЕНТРАЛЬНАЯ РАБОЧАЯ ОБЛАСТЬ (Таблица) -->
+            <!-- 3. ТАБЛИЦА -->
             <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
                 <Grid Margin="10">
                     <DataGrid Name="dgIDDocuments" 
-                    LoadingRow="dgIDDocuments_LoadingRow"
-                    AutoGenerateColumns="False" 
-                    CanUserAddRows="False" 
-                    IsReadOnly="True" 
-                    SelectionMode="Single" 
-                    Background="{StaticResource ChurchGridBg}"
-                    RowBackground="{StaticResource ChurchGridRowAlternating}"
-                    AlternatingRowBackground="{StaticResource ChurchGridRowNormal}"
-                    GridLinesVisibility="Horizontal" 
-                    HorizontalGridLinesBrush="{StaticResource ChurchWindowBorderColor}" 
-                    FontSize="14">
-                        <DataGrid.ColumnHeaderStyle>
-                            <Style TargetType="DataGridColumnHeader">
-                                <Setter Property="Background" Value="#D3E2CD"/>
-                                <Setter Property="Foreground" Value="#2F3E2B"/>
-                                <Setter Property="FontWeight" Value="Bold"/>
-                                <Setter Property="Padding" Value="8,6,8,6"/>
-                                <Setter Property="BorderBrush" Value="#2F3E2B"/>
-                                <Setter Property="BorderThickness" Value="0,0,1,1"/>
-                            </Style>
-                        </DataGrid.ColumnHeaderStyle>
+                              LoadingRow="dgIDDocuments_LoadingRow"
+                              AutoGenerateColumns="False" 
+                              CanUserAddRows="False" 
+                              IsReadOnly="True" 
+                              SelectionMode="Single" 
+                              FontSize="14">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Сотрудник" Binding="{Binding Сотрудник}" Width="2*"/>
                             <DataGridTextColumn Header="Тип документа" Binding="{Binding [Тип документа]}" Width="1.5*"/>
@@ -135,7 +93,6 @@
                                     </Style>
                                 </DataGridTextColumn.ElementStyle>
                             </DataGridTextColumn>
-                            <!-- Дата выдачи -->
                             <DataGridTextColumn Header="Дата выдачи" Binding="{Binding [Дата выдачи], StringFormat=\{0:dd.MM.yyyy\}}" Width="1.2*">
                                 <DataGridTextColumn.ElementStyle>
                                     <Style TargetType="TextBlock">
@@ -148,6 +105,6 @@
                     </DataGrid>
                 </Grid>
             </ScrollViewer>
-</DockPanel>
+        </DockPanel>
     </Border>
 </Window>
