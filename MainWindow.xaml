@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ChurchBudget_v3_WPF"
         mc:Ignorable="d"
-        Title="-=== Учет бюджета церкви v.3.1.130 ===-" Height="660" Width="1150"
+        Title="-=== Учет бюджета церкви v.3.1.158 ===-" Height="660" Width="1150"
         MinHeight="550" MinWidth="950"
         WindowStartupLocation="CenterScreen"
         WindowStyle="None" 
@@ -137,6 +137,12 @@
                     <MenuItem Header="Восстановить БД" Click="RestoreDBToolStripMenuItem_Click">
                         <MenuItem.Icon>
                             <Image Source="Graph/Icons/repare_db.png" RenderOptions.BitmapScalingMode="HighQuality"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <Separator/>
+                    <MenuItem Header="Закрытие периода" Click="ClosePeriodToolStripMenuItem_Click">
+                        <MenuItem.Icon>
+                            <Image Source="Graph/Icons/block.png" RenderOptions.BitmapScalingMode="HighQuality"/>
                         </MenuItem.Icon>
                     </MenuItem>
                     <Separator/>

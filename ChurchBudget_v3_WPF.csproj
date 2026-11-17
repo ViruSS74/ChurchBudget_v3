@@ -170,6 +170,9 @@
     <Compile Include="Views\CashbookWindow.xaml.cs">
       <DependentUpon>CashbookWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\ClosePeriodWindow.xaml.cs">
+      <DependentUpon>ClosePeriodWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\DocEditorWindow.xaml.cs">
       <DependentUpon>DocEditorWindow.xaml</DependentUpon>
     </Compile>
@@ -381,6 +384,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\CashbookWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ClosePeriodWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

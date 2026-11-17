@@ -168,6 +168,20 @@ namespace ChurchBudget_v3_WPF.Views
                 MessageBox.Show("Пожалуйста, выберите дату документа!", "Внимание", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
+            if (dpDocDate.SelectedDate == null)
+            {
+                MessageBox.Show("Пожалуйста, выберите дату документа!", "Внимание", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            // === ПРАВИЛЬНЫЙ БЛОК ДЛЯ NewExpensesWindows.xaml.cs ===
+            if (_listOfDocsService.IsDateClosed(dpDocDate.SelectedDate.Value, out DateTime closedDate))
+            {
+                MessageBox.Show($"Период по {closedDate:dd.MM.yyyy} г. закрыт для редактирования!\nСоздание документов за эту дату запрещено.", "Период закрыт", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+            // =====================================================
+
             using (var conn = new SQLiteConnection(_connectionString))
             {
                 try

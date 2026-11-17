@@ -402,6 +402,14 @@ namespace ChurchBudget_v3_WPF
             }
         }
 
+        // === Закрытие периода ===
+        private void ClosePeriodToolStripMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            var win = new Views.ClosePeriodWindow { Owner = this };
+            win.ShowDialog();
+        }
+
+
         // === Активация программы ===
         private void ActivationToolStripMenuItem_Click(object sender, RoutedEventArgs e)
         {

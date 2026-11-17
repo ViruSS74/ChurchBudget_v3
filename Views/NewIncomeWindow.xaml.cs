@@ -91,7 +91,7 @@ namespace ChurchBudget_v3_WPF.Views
             Dispatcher.BeginInvoke(new Action(() => UpdateTotalAmount()), System.Windows.Threading.DispatcherPriority.Background);
         }
 
-        // КНОПКА "СОХРАНИТЬ" (С новыми полями ФИО, Основание и ПКО)
+        // КНОПКА "СОХРАНИТЬ"
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
             if (string.IsNullOrWhiteSpace(txtDocNumber.Text))
@@ -104,6 +104,19 @@ namespace ChurchBudget_v3_WPF.Views
                 MessageBox.Show("Таблица пуста! Добавьте хотя бы одну позицию.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
+
+            // === ДОБАВИТЬ ЭТОТ БЛОК СЮДА ===
+            if (dpDocDate.SelectedDate == null)
+            {
+                MessageBox.Show("Пожалуйста, выберите дату документа!", "Внимание", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+            if (_listOfDocsService.IsDateClosed(dpDocDate.SelectedDate.Value, out DateTime closedDate))
+            {
+                MessageBox.Show($"Период по {closedDate:dd.MM.yyyy} г. закрыт для редактирования!\nСоздание документов за эту дату запрещено.", "Период закрыт", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+            // ===============================
 
             using (var conn = new SQLiteConnection(_connectionString))
             {

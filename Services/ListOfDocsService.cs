@@ -272,7 +272,6 @@ namespace ChurchBudget_v3_WPF.Services
                 }
             }
         }
-
         public DataTable GetFullRaportichka(string type, int docId)
         {
             DataTable dt = new DataTable();
@@ -313,7 +312,6 @@ namespace ChurchBudget_v3_WPF.Services
             }
             return dt;
         }
-
         public DataRow GetOrganizationData()
         {
             DataTable dt = new DataTable();
@@ -324,7 +322,6 @@ namespace ChurchBudget_v3_WPF.Services
             }
             return dt.Rows.Count > 0 ? dt.Rows[0] : null;
         }
-
         public DataTable GetPersonalList()
         {
             DataTable dt = new DataTable();
@@ -335,7 +332,6 @@ namespace ChurchBudget_v3_WPF.Services
             }
             return dt;
         }
-
         public DataTable GetPersonalListForCmb()
         {
             DataTable dt = new DataTable();
@@ -486,44 +482,44 @@ namespace ChurchBudget_v3_WPF.Services
                 }
 
                 html.AppendLine(@"<!DOCTYPE html>
-<html>
-<head>
-    <meta charset='utf-8'>
-    <meta name='viewport' content='width=148mm, initial-scale=1.0'>
-    <style>
-        @page { size: A5 portrait; margin: 10mm; }
-        body { 
-            font-family: 'Times New Roman', Times, serif; 
-            font-size: 11pt; 
-            margin: 0;
-            padding: 10mm;
-            line-height: 1.3;
-            width: 148mm;
-            max-width: 148mm;
-        }
-        table { 
-            border-collapse: collapse; 
-            width: 148mm;
-            max-width: 148mm;
-        }
-        td { 
-            border: 1px solid #000; 
-            padding: 3px 5px;
-            vertical-align: middle;
-        }
-        .no-border { border: none !important; }
-        .bold { font-weight: bold; }
-        .right { text-align: right; }
-        .center { text-align: center; }
-        .amount { text-align: right; width: 35mm; }
-        @media print {
-            body { width: 148mm; margin: 0; padding: 10mm; }
-            .no-print { display: none; }
-            @page { size: A5 portrait; margin: 10mm; }
-        }
-    </style>
-</head>
-<body>");
+                <html>
+                <head>
+                    <meta charset='utf-8'>
+                    <meta name='viewport' content='width=148mm, initial-scale=1.0'>
+                    <style>
+                        @page { size: A5 portrait; margin: 10mm; }
+                        body { 
+                            font-family: 'Times New Roman', Times, serif; 
+                            font-size: 11pt; 
+                            margin: 0;
+                            padding: 10mm;
+                            line-height: 1.3;
+                            width: 148mm;
+                            max-width: 148mm;
+                        }
+                        table { 
+                            border-collapse: collapse; 
+                            width: 148mm;
+                            max-width: 148mm;
+                        }
+                        td { 
+                            border: 1px solid #000; 
+                            padding: 3px 5px;
+                            vertical-align: middle;
+                        }
+                        .no-border { border: none !important; }
+                        .bold { font-weight: bold; }
+                        .right { text-align: right; }
+                        .center { text-align: center; }
+                        .amount { text-align: right; width: 35mm; }
+                        @media print {
+                            body { width: 148mm; margin: 0; padding: 10mm; }
+                            .no-print { display: none; }
+                            @page { size: A5 portrait; margin: 10mm; }
+                        }
+                    </style>
+                </head>
+                <body>");
 
                 html.AppendLine("<table style='border:none; width:100%;'>");
                 html.AppendLine("<tr><td class='no-border bold center' colspan='2'>" + orgName + "</td></tr>");
@@ -533,17 +529,14 @@ namespace ChurchBudget_v3_WPF.Services
                 html.AppendLine("<tr><td class='no-border bold' style='font-size:12pt;' colspan='2'>РАПОРТИЧКА</td></tr>");
                 html.AppendLine("<tr><td class='no-border' style='height:10px;' colspan='2'></td></tr>");
                 html.AppendLine(string.Format("<tr><td class='no-border'>за <span style='border-bottom:1px solid #000; display:inline-block; min-width:50mm;'>{0}</span></td><td class='no-border'></td></tr>", docDate.ToString("dd.MM.yyyy")));
-
                 if (!string.IsNullOrEmpty(description))
                 {
                     html.AppendLine(string.Format("<tr><td class='no-border' colspan='2' style='font-style:italic; padding-top:5px;'>{0}</td></tr>", description));
                 }
-
                 html.AppendLine("<tr><td class='no-border' style='height:10px;' colspan='2'></td></tr>");
                 html.AppendLine("<tr><td class='no-border'>Принято:</td><td class='no-border'></td></tr>");
                 html.AppendLine("<tr><td class='no-border' style='height:10px;' colspan='2'></td></tr>");
                 html.AppendLine("</table>");
-
                 html.AppendLine("<table>");
                 foreach (var kvp in items)
                 {
@@ -559,7 +552,6 @@ namespace ChurchBudget_v3_WPF.Services
                 html.AppendLine("<tr><td class='no-border' style='height:10px;'></td><td class='no-border'></td></tr>");
                 html.AppendLine("<tr><td class='no-border'>М.П.</td><td class='no-border'></td></tr>");
                 html.AppendLine("</table>");
-
                 html.AppendLine("</body></html>");
             }
             return html.ToString();
@@ -569,17 +561,13 @@ namespace ChurchBudget_v3_WPF.Services
         {
             // 1. Получаем все подписи одной строчкой, используя текущий экземпляр сервиса
             StaffSignatures signatures = this.GetStaffSignatures();
-
             StringBuilder html = new StringBuilder();
-
             using (var conn = new SQLiteConnection(_connectionString))
             {
                 conn.Open();
-
                 string docSql = "SELECT doc_number, date FROM expense_docs WHERE id = @id";
                 string docNumber = "";
                 DateTime docDate = DateTime.Now;
-
                 using (var cmd = new SQLiteCommand(docSql, conn))
                 {
                     cmd.Parameters.AddWithValue("@id", docId);
@@ -594,9 +582,9 @@ namespace ChurchBudget_v3_WPF.Services
                 }
 
                 string descSql = @"
-            SELECT GROUP_CONCAT(basis, '; ') 
-            FROM expense_items 
-            WHERE doc_id = @docId AND basis IS NOT NULL AND basis != ''";
+                SELECT GROUP_CONCAT(basis, '; ') 
+                FROM expense_items 
+                WHERE doc_id = @docId AND basis IS NOT NULL AND basis != ''";
                 string description = "";
                 using (var cmd = new SQLiteCommand(descSql, conn))
                 {
@@ -605,12 +593,10 @@ namespace ChurchBudget_v3_WPF.Services
                     if (result != null && result != DBNull.Value)
                         description = result.ToString();
                 }
-
                 string orgSql = "SELECT name, location, deanery FROM organizations LIMIT 1";
                 string orgName = "";
                 string location = "";
                 string deanery = "";
-
                 using (var cmd = new SQLiteCommand(orgSql, conn))
                 {
                     using (var reader = cmd.ExecuteReader())
@@ -626,19 +612,19 @@ namespace ChurchBudget_v3_WPF.Services
 
                 // добавлено получение check_number для каждой позиции
                 string itemsSql = @"
-            SELECT 
-                pc.name as parent_name,
-                ec.name as category_name, 
-                ec.report_code,
-                COALESCE(SUM(ei.amount), 0) as amount,
-                GROUP_CONCAT(ei.basis, '; ') as all_basis,
-                GROUP_CONCAT(ei.check_number, '; ') as all_checks
-            FROM expense_categories ec
-            LEFT JOIN expense_items ei ON ec.name = ei.category AND ei.doc_id = @docId
-            LEFT JOIN expense_categories pc ON ec.parent_id = pc.id
-            WHERE ei.doc_id = @docId
-            GROUP BY ec.id, ec.name, ec.report_code, pc.name
-            ORDER BY pc.name, ec.report_code";
+                SELECT 
+                    pc.name as parent_name,
+                    ec.name as category_name, 
+                    ec.report_code,
+                    COALESCE(SUM(ei.amount), 0) as amount,
+                    GROUP_CONCAT(ei.basis, '; ') as all_basis,
+                    GROUP_CONCAT(ei.check_number, '; ') as all_checks
+                FROM expense_categories ec
+                LEFT JOIN expense_items ei ON ec.name = ei.category AND ei.doc_id = @docId
+                LEFT JOIN expense_categories pc ON ec.parent_id = pc.id
+                WHERE ei.doc_id = @docId
+                GROUP BY ec.id, ec.name, ec.report_code, pc.name
+                ORDER BY pc.name, ec.report_code";
 
                 var items = new List<Dictionary<string, object>>();
                 var parentSums = new Dictionary<string, decimal>();
@@ -705,50 +691,50 @@ namespace ChurchBudget_v3_WPF.Services
 
                 // добавлены стили для шапки и родительских категорий
                 html.AppendLine(@"<!DOCTYPE html>
-<html>
-<head>
-    <meta charset='utf-8'>
-    <meta name='viewport' content='width=190mm, initial-scale=1.0'>
-    <style>
-        @page { size: A4 portrait; margin: 10mm; }
-        body { 
-            font-family: 'Times New Roman', Times, serif; 
-            font-size: 10pt; 
-            margin: 0;
-            padding: 10mm;
-            line-height: 1.3;
-            width: 190mm;
-            max-width: 190mm;
-        }
-        table { 
-            border-collapse: collapse; 
-            width: 190mm;
-            max-width: 190mm;
-        }
-        td, th { 
-            border: 1px solid #000; 
-            padding: 3px 5px;
-            vertical-align: middle;
-        }
-        .no-border { border: none !important; }
-        .bold { font-weight: bold; }
-        .right { text-align: right; }
-        .center { text-align: center; }
-        .amount { text-align: right; width: 30mm; }
-        .basis { font-style: italic; font-size: 9pt; color: #333; }
-        .check-num { text-align: center; font-size: 9pt; }
-        .category-group { font-weight: bold; background-color: #f5f5f5; }
-        .subcategory { padding-left: 15px; }
-        .total { background-color: #e0e0e0; font-weight: bold; }
-        th { font-weight: bold; background-color: #f0f0f0; }
-        @media print {
-            body { width: 190mm; margin: 0; padding: 10mm; }
-            .no-print { display: none; }
-            @page { size: A4 portrait; margin: 10mm; }
-        }
-    </style>
-</head>
-<body>");
+                <html>
+                <head>
+                    <meta charset='utf-8'>
+                    <meta name='viewport' content='width=190mm, initial-scale=1.0'>
+                    <style>
+                        @page { size: A4 portrait; margin: 10mm; }
+                        body { 
+                            font-family: 'Times New Roman', Times, serif; 
+                            font-size: 10pt; 
+                            margin: 0;
+                            padding: 10mm;
+                            line-height: 1.3;
+                            width: 190mm;
+                            max-width: 190mm;
+                        }
+                        table { 
+                            border-collapse: collapse; 
+                            width: 190mm;
+                            max-width: 190mm;
+                        }
+                        td, th { 
+                            border: 1px solid #000; 
+                            padding: 3px 5px;
+                            vertical-align: middle;
+                        }
+                        .no-border { border: none !important; }
+                        .bold { font-weight: bold; }
+                        .right { text-align: right; }
+                        .center { text-align: center; }
+                        .amount { text-align: right; width: 30mm; }
+                        .basis { font-style: italic; font-size: 9pt; color: #333; }
+                        .check-num { text-align: center; font-size: 9pt; }
+                        .category-group { font-weight: bold; background-color: #f5f5f5; }
+                        .subcategory { padding-left: 15px; }
+                        .total { background-color: #e0e0e0; font-weight: bold; }
+                        th { font-weight: bold; background-color: #f0f0f0; }
+                        @media print {
+                            body { width: 190mm; margin: 0; padding: 10mm; }
+                            .no-print { display: none; }
+                            @page { size: A4 portrait; margin: 10mm; }
+                        }
+                    </style>
+                </head>
+                <body>");
 
                 // Шапка
                 html.AppendLine("<table style='border:none; width:100%;'>");
@@ -1269,36 +1255,36 @@ namespace ChurchBudget_v3_WPF.Services
             // Строгая привязка: ищем документ строго для указанного получателя (по ID или по точному совпадению ФИО).
             // Если получатель не указан или у него нет документа в id_documents — поле Passport будет пустым.
             string sql = $@"
-    SELECT
-        co.order_number AS [No],
-        co.date AS [Date],
-        co.amount AS [Sum],
-        COALESCE(
-            NULLIF(TRIM(co.person_name_manual), ''), 
-            (p.last_name || ' ' || p.first_name || ' ' || p.middle_name)
-        ) AS [Recipient],
+            SELECT
+                co.order_number AS [No],
+                co.date AS [Date],
+                co.amount AS [Sum],
+                COALESCE(
+                    NULLIF(TRIM(co.person_name_manual), ''), 
+                    (p.last_name || ' ' || p.first_name || ' ' || p.middle_name)
+                ) AS [Recipient],
         
-        CASE 
-            WHEN idd.id IS NOT NULL THEN 
-                (COALESCE(td.name, 'Паспорт') || ' ' || COALESCE(idd.series, '') || ' ' || COALESCE(idd.number, '') || ', выдан ' || COALESCE(idd.issued_by, '') || ' ' || COALESCE(idd.issue_date, ''))
-            ELSE '' 
-        END AS [Passport],
+                CASE 
+                    WHEN idd.id IS NOT NULL THEN 
+                        (COALESCE(td.name, 'Паспорт') || ' ' || COALESCE(idd.series, '') || ' ' || COALESCE(idd.number, '') || ', выдан ' || COALESCE(idd.issued_by, '') || ' ' || COALESCE(idd.issue_date, ''))
+                    ELSE '' 
+                END AS [Passport],
         
-        p.role AS [RecipientRole],
-        co.base AS [Basis],
-        co.appendix AS [Appendix],
-        'BYN' AS [CurrencyCode],
-        'Белорусский рубль' AS [CurrencyName]
-    FROM cash_orders co
-    LEFT JOIN personal p ON 
-        -- 1. Связь по прямому ID сотрудника, если он записан в ордере
-        (co.person_id IS NOT NULL AND co.person_id > 0 AND co.person_id = p.id)
-        OR 
-        -- 2. Связь по совпадению ФИО (Фамилия Имя Отчество) с защитой от лишних пробелов
-        (TRIM(co.person_name_manual) != '' AND TRIM(p.last_name || ' ' || p.first_name || ' ' || p.middle_name) LIKE TRIM(co.person_name_manual) || '%')
-    LEFT JOIN id_documents idd ON p.id = idd.employee_id
-    LEFT JOIN type_id_document td ON idd.type_id_doc = td.id
-    WHERE co.id = {rkoId}";
+                p.role AS [RecipientRole],
+                co.base AS [Basis],
+                co.appendix AS [Appendix],
+                'BYN' AS [CurrencyCode],
+                'Белорусский рубль' AS [CurrencyName]
+            FROM cash_orders co
+            LEFT JOIN personal p ON 
+                -- 1. Связь по прямому ID сотрудника, если он записан в ордере
+                (co.person_id IS NOT NULL AND co.person_id > 0 AND co.person_id = p.id)
+                OR 
+                -- 2. Связь по совпадению ФИО (Фамилия Имя Отчество) с защитой от лишних пробелов
+                (TRIM(co.person_name_manual) != '' AND TRIM(p.last_name || ' ' || p.first_name || ' ' || p.middle_name) LIKE TRIM(co.person_name_manual) || '%')
+            LEFT JOIN id_documents idd ON p.id = idd.employee_id
+            LEFT JOIN type_id_document td ON idd.type_id_doc = td.id
+            WHERE co.id = {rkoId}";
 
             return ExecuteDataTable(sql);
         }
@@ -1313,14 +1299,12 @@ namespace ChurchBudget_v3_WPF.Services
             dt.Columns.Add("DocName");
             dt.Columns.Add("CurrencyCode");
             dt.Columns.Add("CurrencyName");
-
             dt.Rows.Add("1", "1а", "2", "3", "4", "4а");
 
             while (dt.Rows.Count < 16)
             {
                 dt.Rows.Add(string.Empty, string.Empty, string.Empty, string.Empty, "BYN", "Белорусский рубль");
             }
-
             return dt;
         }
 
@@ -1333,9 +1317,7 @@ namespace ChurchBudget_v3_WPF.Services
             dt.Columns.Add("DocName");
             dt.Columns.Add("CurrencyCode");
             dt.Columns.Add("CurrencyName");
-
             dt.Rows.Add("Фамилия, имя, отчество", "Документ, удостоверяющий личность", "Основание выдачи денег", "Наименование документа", "Код", "Валюта");
-
             dt.Rows.Add("1", "1а", "2", "3", "4", "4а");
 
             using (SQLiteConnection conn = new SQLiteConnection(_connectionString))
@@ -1498,16 +1480,16 @@ namespace ChurchBudget_v3_WPF.Services
         {
             DataTable dt = new DataTable();
             string sql = @"
-        SELECT 
-            p.last_name, 
-            (p.first_name || ' ' || p.middle_name) as first_mid,
-            (COALESCE(d.series, '') || ' ' || COALESCE(d.number, '') || ', выдан ' || COALESCE(d.issued_by, '')) as passport_full,
-            COALESCE(e.description, '') as expense_reason
-        FROM personal p
-        LEFT JOIN id_documents d ON p.id = d.employee_id
-        LEFT JOIN expense_items e ON p.id = e.doc_id
-        WHERE p.role != 'Настоятель храма'
-        ORDER BY p.last_name ASC";
+            SELECT 
+                p.last_name, 
+                (p.first_name || ' ' || p.middle_name) as first_mid,
+                (COALESCE(d.series, '') || ' ' || COALESCE(d.number, '') || ', выдан ' || COALESCE(d.issued_by, '')) as passport_full,
+                COALESCE(e.description, '') as expense_reason
+            FROM personal p
+            LEFT JOIN id_documents d ON p.id = d.employee_id
+            LEFT JOIN expense_items e ON p.id = e.doc_id
+            WHERE p.role != 'Настоятель храма'
+            ORDER BY p.last_name ASC";
 
             using (SQLiteConnection conn = new SQLiteConnection(_connectionString))
             {
@@ -1533,25 +1515,25 @@ namespace ChurchBudget_v3_WPF.Services
             using (var conn = new SQLiteConnection(ConnectionString))
             {
                 string sql = string.Format(@"
-            SELECT 
-                CASE WHEN i.id = (SELECT MIN(id) FROM expense_items WHERE doc_id = co.id) 
-                     THEN (p.last_name || ' ' || p.first_name || ' ' || p.middle_name)
-                     ELSE '' END AS [1],
-                CASE WHEN i.id = (SELECT MIN(id) FROM expense_items WHERE doc_id = co.id) AND idd.number IS NOT NULL 
-                     THEN (COALESCE(td.name, 'Паспорт') || ' ' || COALESCE(idd.series, '') || ' ' || idd.number || ', выдан ' || COALESCE(idd.issued_by, ''))
-                     ELSE '' END AS [1а],
-                i.category AS [2],
-                '' AS [3],
-                'BYN' AS [4],
-                'Белорусский рубль' AS [4а],
-                i.amount AS [Sum_Hidden]
-            FROM expense_items i
-            JOIN cash_orders co ON i.doc_id = co.id 
-            LEFT JOIN personal p ON co.person_id = p.id
-            LEFT JOIN id_documents idd ON p.id = idd.employee_id 
-            LEFT JOIN type_id_document td ON idd.type_id_doc = td.id
-            WHERE co.id = {0}
-            ORDER BY i.id", rkoId);
+                SELECT 
+                    CASE WHEN i.id = (SELECT MIN(id) FROM expense_items WHERE doc_id = co.id) 
+                         THEN (p.last_name || ' ' || p.first_name || ' ' || p.middle_name)
+                         ELSE '' END AS [1],
+                    CASE WHEN i.id = (SELECT MIN(id) FROM expense_items WHERE doc_id = co.id) AND idd.number IS NOT NULL 
+                         THEN (COALESCE(td.name, 'Паспорт') || ' ' || COALESCE(idd.series, '') || ' ' || idd.number || ', выдан ' || COALESCE(idd.issued_by, ''))
+                         ELSE '' END AS [1а],
+                    i.category AS [2],
+                    '' AS [3],
+                    'BYN' AS [4],
+                    'Белорусский рубль' AS [4а],
+                    i.amount AS [Sum_Hidden]
+                FROM expense_items i
+                JOIN cash_orders co ON i.doc_id = co.id 
+                LEFT JOIN personal p ON co.person_id = p.id
+                LEFT JOIN id_documents idd ON p.id = idd.employee_id 
+                LEFT JOIN type_id_document td ON idd.type_id_doc = td.id
+                WHERE co.id = {0}
+                ORDER BY i.id", rkoId);
 
                 SQLiteDataAdapter adapter = new SQLiteDataAdapter(sql, conn);
                 adapter.Fill(dt);
@@ -1590,11 +1572,11 @@ namespace ChurchBudget_v3_WPF.Services
             List<string> items = new List<string>();
 
             string sql = @"
-        SELECT 
-            ei.category || ' (' || COALESCE(ei.basis, '') || ')' as full_item
-        FROM expense_items ei
-        INNER JOIN cash_orders co ON ei.doc_id = co.doc_ref_id
-        WHERE co.id = @orderId";
+            SELECT 
+                ei.category || ' (' || COALESCE(ei.basis, '') || ')' as full_item
+            FROM expense_items ei
+            INNER JOIN cash_orders co ON ei.doc_id = co.doc_ref_id
+            WHERE co.id = @orderId";
 
             using (var conn = new SQLiteConnection(_connectionString))
             {
@@ -1619,13 +1601,13 @@ namespace ChurchBudget_v3_WPF.Services
         {
             // Запрос ищет самую минимальную дату среди всех таблиц документов
             string sql = @"
-        SELECT MIN(min_date) FROM (
-            SELECT MIN(date) as min_date FROM income_docs WHERE date IS NOT NULL AND date != ''
-            UNION ALL
-            SELECT MIN(date) as min_date FROM expense_docs WHERE date IS NOT NULL AND date != ''
-            UNION ALL
-            SELECT MIN(date) as min_date FROM cash_orders WHERE date IS NOT NULL AND date != ''
-        )";
+            SELECT MIN(min_date) FROM (
+                SELECT MIN(date) as min_date FROM income_docs WHERE date IS NOT NULL AND date != ''
+                UNION ALL
+                SELECT MIN(date) as min_date FROM expense_docs WHERE date IS NOT NULL AND date != ''
+                UNION ALL
+                SELECT MIN(date) as min_date FROM cash_orders WHERE date IS NOT NULL AND date != ''
+            )";
 
             try
             {
@@ -1667,11 +1649,11 @@ namespace ChurchBudget_v3_WPF.Services
             var sigs = new StaffSignatures();
 
             string sqlStaff = @"
-        SELECT p.id, p.role, p.last_name, p.first_name, p.middle_name, 
-               td.name as doc_type, idd.series, idd.number, idd.issued_by, idd.issue_date
-        FROM personal p
-        LEFT JOIN id_documents idd ON p.id = idd.employee_id
-        LEFT JOIN type_id_document td ON idd.type_id_doc = td.id";
+            SELECT p.id, p.role, p.last_name, p.first_name, p.middle_name, 
+                   td.name as doc_type, idd.series, idd.number, idd.issued_by, idd.issue_date
+            FROM personal p
+            LEFT JOIN id_documents idd ON p.id = idd.employee_id
+            LEFT JOIN type_id_document td ON idd.type_id_doc = td.id";
 
             try
             {
@@ -1753,5 +1735,83 @@ namespace ChurchBudget_v3_WPF.Services
             }
             return sigs;
         }
+
+        // === ФУНКЦИИ ЗАКРЫТИЯ ПЕРИОДА (ЗАПРЕТ РЕДАКТИРОВАНИЯ ПРОШЛЫХ ЛЕТ) ===
+
+        private void EnsureSettingsTableExists(SQLiteConnection conn)
+        {
+            string sql = @"CREATE TABLE IF NOT EXISTS app_settings (
+                    setting_key TEXT PRIMARY KEY, 
+                    setting_value TEXT
+                   );";
+            using (var cmd = new SQLiteCommand(sql, conn))
+            {
+                cmd.ExecuteNonQuery();
+            }
+        }
+
+        public DateTime? GetClosedPeriodDate()
+        {
+            try
+            {
+                using (var conn = new SQLiteConnection(_connectionString))
+                {
+                    conn.Open();
+                    EnsureSettingsTableExists(conn);
+
+                    string sql = "SELECT setting_value FROM app_settings WHERE setting_key = 'ClosedPeriodDate' LIMIT 1;";
+                    using (var cmd = new SQLiteCommand(sql, conn))
+                    {
+                        var res = cmd.ExecuteScalar();
+                        if (res != null && res != DBNull.Value && DateTime.TryParse(res.ToString(), out DateTime dt))
+                        {
+                            return dt.Date;
+                        }
+                    }
+                }
+            }
+            catch { }
+            return null;
+        }
+
+        public void SetClosedPeriodDate(DateTime? closedDate)
+        {
+            using (var conn = new SQLiteConnection(_connectionString))
+            {
+                conn.Open();
+                EnsureSettingsTableExists(conn);
+
+                if (closedDate.HasValue)
+                {
+                    string sql = @"INSERT OR REPLACE INTO app_settings (setting_key, setting_value) 
+                           VALUES ('ClosedPeriodDate', @val);";
+                    using (var cmd = new SQLiteCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@val", closedDate.Value.ToString("yyyy-MM-dd"));
+                        cmd.ExecuteNonQuery();
+                    }
+                }
+                else
+                {
+                    string sql = "DELETE FROM app_settings WHERE setting_key = 'ClosedPeriodDate';";
+                    using (var cmd = new SQLiteCommand(sql, conn))
+                    {
+                        cmd.ExecuteNonQuery();
+                    }
+                }
+            }
+        }
+        public bool IsDateClosed(DateTime docDate, out DateTime closedDate)
+        {
+            DateTime? closed = GetClosedPeriodDate();
+            if (closed.HasValue && docDate.Date <= closed.Value.Date)
+            {
+                closedDate = closed.Value;
+                return true;
+            }
+            closedDate = DateTime.MinValue;
+            return false;
+        }
+
     }
 }
