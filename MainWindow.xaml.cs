@@ -26,8 +26,7 @@ namespace ChurchBudget_v3_WPF
             dbService.RunDatabaseMigrations();
 
             // 4. Дальше идет инициализация ваших обычных рабочих сервисов...
-            // _service = new CashbookService(connString);
-
+            
             // Подписываемся на событие полной загрузки окна
             this.Loaded += MainWindow_Loaded;
 
@@ -409,7 +408,6 @@ namespace ChurchBudget_v3_WPF
             win.ShowDialog();
         }
 
-
         // === Активация программы ===
         private void ActivationToolStripMenuItem_Click(object sender, RoutedEventArgs e)
         {
@@ -423,16 +421,22 @@ namespace ChurchBudget_v3_WPF
         }
 
         // === Обновление программы ===
-        private async void MenuUpdateToolStripMenuItem_Click(object sender, RoutedEventArgs e)
+        private void MenuUpdateToolStripMenuItem_Click(object sender, RoutedEventArgs e)
         {
-            // Передаем текущую версию приложения (её можно вынести в константы или читать из сборки)
-            string currentAppVersion = "3.1.125";
-
-            var updater = new UpdateService(currentAppVersion);
-
-            // Запускаем асинхронную проверку интернета
-            await updater.CheckAndRunUpdateAsync();
+            try
+            {
+                System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
+                {
+                    FileName = "https://churchbudget.free.nf",
+                    UseShellExecute = true
+                });
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Не удалось открыть сайт поддержки: " + ex.Message + "\nАдрес сайта: https://churchbudget.free.nf", "Обновление программы", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
         }
+
 
         // === Справка ===
         // === Справка по программе ===
