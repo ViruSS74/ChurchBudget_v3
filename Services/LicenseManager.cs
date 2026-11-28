@@ -129,11 +129,11 @@ namespace ChurchBudget_v3_WPF.Services
             return (name, location);
         }
 
-        // 5. КОНТРОЛЬ ТРИАЛА: 31 день от даты самого первого ордера
+        // 5. КОНТРОЛЬ ТРИАЛА: 40 дней от даты самого первого ордера
         public static bool CheckTrialPeriod(string dbPath, out DateTime trialStart, out int daysLeft)
         {
             trialStart = DateTime.Now.Date;
-            daysLeft = 31;
+            daysLeft = 40;
             try
             {
                 if (!File.Exists(dbPath)) return false;
@@ -160,7 +160,7 @@ namespace ChurchBudget_v3_WPF.Services
                     }
 
                     int elapsedDays = (DateTime.Now.Date - trialStart.Date).Days;
-                    daysLeft = 31 - elapsedDays;
+                    daysLeft = 40 - elapsedDays;
 
                     return daysLeft >= 0;
                 }
